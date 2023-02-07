@@ -1,0 +1,153 @@
+﻿<UserControl x:Class="Table2Chart.Views.OxyProperties.uclLineSeriesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ex ="clr-namespace:Table2Chart.Extensions"
+             xmlns:oxy="clr-namespace:OxyPlot;assembly=OxyPlot"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:Table2Chart.Views.OxyProperties"
+             xmlns:series="clr-namespace:Table2Chart.Common.Models.OxyModels.Series"
+             xmlns:oxyproperties="clr-namespace:Table2Chart.ViewModels.OxyProperties"
+             d:DataContext="{d:DesignInstance Type=series:LineSeriesProperty}"
+             mc:Ignorable="d"
+             d:DesignHeight="400"
+             d:DesignWidth="200">
+    <Grid d:Background="Wheat">
+        <StackPanel Margin="3">
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="线标题："
+                           VerticalAlignment="Center" />
+                <TextBox  Grid.Column="1"
+                          Margin="3 0 0 0"
+                          md:HintAssist.Hint="可设置标题"
+                          Text="{Binding Title}" />
+            </Grid>
+
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="标记点样式："
+                           VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1"
+                          SelectedItem="{Binding MarkerType}"
+                          ItemsSource="{Binding Source={ex:EnumBindingSource {x:Type oxy:MarkerType}}}"
+                          Margin="3 0 0 0" />
+            </Grid>
+
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="标记点大小："
+                           VerticalAlignment="Center" />
+                <TextBox  Grid.Column="1"
+                          Margin="3 0 0 0"
+                          md:HintAssist.Hint="MarkerSize"
+                          Text="{Binding MarkerSize}" />
+            </Grid>
+
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="标记点轮廓粗细："
+                           VerticalAlignment="Center" />
+                <TextBox  Grid.Column="1"
+                          Margin="3 0 0 0"
+                          md:HintAssist.Hint="MarkerStrokeThickness"
+                          Text="{Binding MarkerStrokeThickness}" />
+            </Grid>
+
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="线粗细："
+                           VerticalAlignment="Center" />
+                <TextBox  Grid.Column="1"
+                          Margin="3 0 0 0"
+                          md:HintAssist.Hint="StrokeThickness"
+                          Text="{Binding StrokeThickness}" />
+            </Grid>
+
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="标记点轮廓颜色："
+                           VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1"
+                          Margin="0 3 0 0"
+                          ItemsSource="{Binding Source={StaticResource ColorsCollection}}"
+                          ItemTemplate="{StaticResource colorTemplate}"
+                          SelectedItem="{Binding MarkerStroke,Converter={StaticResource PropertyInfoToOxyColor}}" />
+            </Grid>
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="标记点填充颜色："
+                           VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1"
+                          Margin="0 3 0 0"
+                          ItemsSource="{Binding Source={StaticResource ColorsCollection}}"
+                          ItemTemplate="{StaticResource colorTemplate}"
+                          SelectedItem="{Binding MarkerFill,Converter={StaticResource PropertyInfoToOxyColor}}" />
+            </Grid>
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="线颜色："
+                           VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1"
+                          Margin="0 3 0 0"
+                          ItemsSource="{Binding Source={StaticResource ColorsCollection}}"
+                          ItemTemplate="{StaticResource colorTemplate}"
+                          SelectedItem="{Binding Color,Converter={StaticResource PropertyInfoToOxyColor}}" />
+            </Grid>
+
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="线样式："
+                           VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1"
+                          Margin="3 0 0 0"
+                          ItemsSource="{Binding Source={ex:EnumBindingSource {x:Type oxy:LineStyle}}}"
+                          SelectedItem="{Binding LineStyle}" />
+            </Grid>
+
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="可否跟踪虚拟点："
+                           VerticalAlignment="Center" />
+
+                <ToggleButton Grid.Column="1"
+                              Height="30"
+                              md:ToggleButtonAssist.OnContent="{md:PackIcon Kind=Eyedropper}"
+                              Content="{md:PackIcon Kind=EyedropperOff}"
+                              IsChecked="{Binding CanTrackerInterpolatePoints}"
+                              Style="{StaticResource MaterialDesignActionToggleButton}" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>

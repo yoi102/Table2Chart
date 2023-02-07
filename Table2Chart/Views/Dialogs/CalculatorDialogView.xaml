@@ -1,0 +1,164 @@
+﻿<UserControl x:Class="Table2Chart.Views.Dialogs.CalculatorDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialogs="clr-namespace:Table2Chart.ViewModels.Dialogs"
+             xmlns:local="clr-namespace:Table2Chart.Views.Dialogs"
+             d:DataContext="{d:DesignInstance Type=dialogs:CalculatorDialogViewModel}"
+             mc:Ignorable="d"
+             d:Background="Wheat"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+
+        <StackPanel>
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="标题命名："
+                           VerticalAlignment="Center" />
+                <TextBox Grid.Column="1"
+                         TextWrapping="Wrap"
+                         md:HintAssist.Hint="输入命名"
+                         ToolTip="输入或修改命名"
+                         Text="{Binding ExpressionCalculator.Title}" />
+            </Grid>
+
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="表达式："
+                           VerticalAlignment="Stretch" />
+                <TextBox Grid.Column="1"
+                         TextWrapping="Wrap"
+                         ToolTipService.ShowDuration="99999"
+                         md:HintAssist.Hint="输入表达式，如{a}+{b}；需确定输入的表达式正确。"
+                         Text="{Binding ExpressionCalculator.Expression}">
+                    <TextBox.ToolTip>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Top">
+                            <Run  Text="+ (addition)" /><LineBreak />
+                            <Run  Text="- (subtraction)" /><LineBreak />
+                            <Run  Text="* (multiplication)" /><LineBreak />
+                            <Run  Text="/ (division)" /><LineBreak />
+                            <Run  Text="% (remainder)" /><LineBreak />
+                            <Run  Text="^ (power)" /><LineBreak />
+                            <Run  Text="log (logarithm)" /><LineBreak />
+                            <Run  Text="max (maximum)" /><LineBreak />
+                            <Run  Text="min (minimum)" /> <LineBreak />
+                            <Run  Text="ceil (ceiling)" /> <LineBreak />
+                            <Run  Text="floor (floor)" /> <LineBreak />
+                            <Run  Text="round (rounding)" /> <LineBreak />
+                            <Run  Text="exp (e raised to power)" /> <LineBreak />
+                            <Run  Text="abs (absolute)" /> <LineBreak />
+                            </TextBlock>
+                            <TextBlock Margin=" 10 0 0 0"
+                                       VerticalAlignment="Top">
+                            <Run  Text="- (negation)" /><LineBreak />
+                            <Run  Text="! (factorial)" /><LineBreak />
+                            <Run  Text="sqrt (square root)" /><LineBreak />
+                            <Run  Text="sin (sine)" /><LineBreak />
+                            <Run  Text="asin (arcsine)" /><LineBreak />
+                            <Run  Text="cos (cosine)" /><LineBreak />
+                            <Run  Text="acos (arccosine)" /><LineBreak />
+                            <Run  Text="tan (tangent)" /><LineBreak />
+                            <Run  Text="atan (arctangent)" /> <LineBreak />
+                            <Run  Text="rad (convert degrees to radians)" /> <LineBreak />
+                            <Run  Text="deg (convert radians to degrees)" /> <LineBreak />
+                            </TextBlock>
+                        </StackPanel>
+                    </TextBox.ToolTip>
+                </TextBox>
+                <Button Grid.Column="2"
+                        CommandParameter="RunMathExpr"
+                        Command="{Binding ExecuteCommand}"
+                        VerticalAlignment="Top"
+                        Content="执行" />
+            </Grid>
+
+            <GroupBox MinHeight="150">
+                <GroupBox.Header>
+                    <DockPanel>
+                        <TextBlock Text="输入参数："
+                                   DockPanel.Dock="Left" />
+                        <!--<Button HorizontalAlignment="Left"
+                                DockPanel.Dock="Left"
+                                VerticalAlignment="Center"
+                                CommandParameter="AddInput"
+                                Command="{Binding ExecuteCommand}"
+                                Content="{md:PackIcon Kind=Add}"
+                                Style="{StaticResource MaterialDesignToolForegroundButton}" />-->
+                    </DockPanel>
+                </GroupBox.Header>
+                <ItemsControl ItemsSource="{Binding ExpressionCalculator.Inputs}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="80*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                         Margin="5 0"
+                                         Text="{Binding Name}"
+                                         ToolTip="注意：不能包含 - + 等运算符号，也不能设置为重复名称"
+                                         MinWidth="20"
+                                         FontWeight="Bold"
+                                         VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="1"
+                                           Margin="5 0"
+                                           Text="："
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center" />
+                                <ComboBox Margin="10 2"
+                                          IsEditable="True"
+                                          Grid.Column="2"
+                                          ItemsSource="{Binding DataContext.ColumnInfoProperties,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:CalculatorDialogView}}"
+                                          Text="{Binding StringValue}" />
+                                <!--<Button Grid.Column="3"
+                                        CommandParameter="{Binding}"
+                                        Command="{Binding DataContext.RemoveInputCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:CalculatorDialogView}}"
+                                        Content="{md:PackIcon Kind=Close}"
+                                        Style="{StaticResource MaterialDesignToolForegroundButton}" />-->
+
+                                <!--Text="{Binding StringValue}" />-->
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </GroupBox>
+
+            <GroupBox Header="输出结果："
+                      MinHeight="80">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="80*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="结果："
+                               VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1"
+                               FontWeight="Bold"
+                               TextWrapping="Wrap"
+                               Text="{Binding ExpressionCalculator.OutputValue}" />
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

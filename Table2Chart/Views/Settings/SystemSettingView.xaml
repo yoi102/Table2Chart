@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="Table2Chart.Views.Settings.SystemSettingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Table2Chart.Views.Settings"
+             xmlns:settings="clr-namespace:Table2Chart.ViewModels.Settings"
+             d:DataContext="{d:DesignInstance Type=settings:SystemSettingViewModel}"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Margin="5"
+                       Text="是否实时更新表格：" />
+            <TextBlock Grid.Column="2"
+                       Margin="5"
+                       Text="实时更新间隔（毫秒）："
+                       Visibility="{Binding TimerIntervalOn,Converter={StaticResource Bool2Visibility}}" />
+            <TextBlock Grid.Row="1"
+                       Margin="5"
+                       Text="图表列数：" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="2"
+                       Margin="5"
+                       Text="更新表格时是否重置图表：" />
+            <TextBlock Grid.Row="2"
+                       Margin="5"
+                       Text="图表高度：" />
+            <TextBlock Grid.Row="2"
+                       Grid.Column="2"
+                       Margin="5"
+                       Text="图表宽度：" />
+
+            <ToggleButton Grid.Row="0"
+                          HorizontalAlignment="Left"
+                          Grid.Column="1"
+                          IsChecked="{Binding TimerIntervalOn}" />
+            <TextBox Grid.Row="0"
+                     Visibility="{Binding TimerIntervalOn,Converter={StaticResource Bool2Visibility}}"
+                     Grid.Column="3"
+                     Text="{Binding TimerIntervalSeconds}" />
+
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Text="{Binding PlotViewsColumnsCount}" />
+            <ToggleButton Grid.Row="1"
+                          HorizontalAlignment="Left"
+                          Grid.Column="3"
+                          IsChecked="{Binding CanTimerResetPlot}" />
+
+            <DockPanel Grid.Row="2"
+                       Grid.Column="1">
+                <TextBox MinWidth="50"
+                         Text="{Binding PlotViewHeight}" />
+                <Slider  Maximum="1200"
+                         Minimum="20"
+                         MinWidth="150"
+                         TickFrequency="1"
+                         md:SliderAssist.OnlyShowFocusVisualWhileDragging="True"
+                         Style="{StaticResource MaterialDesignDiscreteSlider}"
+                         Value="{Binding PlotViewHeight}"
+                         TickPlacement="BottomRight" />
+            </DockPanel>
+            <DockPanel Grid.Row="2"
+                       Grid.Column="3">
+                <TextBox MinWidth="50"
+                         Text="{Binding PlotViewWidth}" />
+                <Slider  Maximum="1200"
+                         Minimum="20"
+                         MinWidth="150"
+                         TickFrequency="1"
+                         md:SliderAssist.OnlyShowFocusVisualWhileDragging="True"
+                         Style="{StaticResource MaterialDesignDiscreteSlider}"
+                         Value="{Binding PlotViewWidth}"
+                         TickPlacement="BottomRight" />
+            </DockPanel>
+        </Grid>
+
+        <GroupBox Grid.Row="1"
+                  Margin="5"
+                  Header="示例：">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto">
+                <oxy:PlotView Model="{Binding PlotModel}"
+                              Width="{Binding PlotViewWidth}"
+                              Height="{Binding PlotViewHeight}">
+                </oxy:PlotView>
+            </ScrollViewer>
+        </GroupBox>
+    </Grid>
+</UserControl>

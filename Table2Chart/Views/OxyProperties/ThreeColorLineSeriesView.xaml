@@ -1,0 +1,307 @@
+﻿<UserControl x:Class="Table2Chart.Views.OxyProperties.ThreeColorLineSeriesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:commn="clr-namespace:Table2Chart.Common"
+             xmlns:oxy="clr-namespace:OxyPlot;assembly=OxyPlot"
+             xmlns:be="clr-namespace:Table2Chart.Behaviors"
+             xmlns:ex="clr-namespace:Table2Chart.Extensions"
+             xmlns:local="clr-namespace:Table2Chart.Views.OxyProperties"
+             xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:series="clr-namespace:Table2Chart.Common.Models.OxyModels.Series"
+             xmlns:oxyproperties="clr-namespace:Table2Chart.ViewModels.OxyProperties"
+             d:DataContext="{d:DesignInstance Type=oxyproperties:ThreeColorLineSeriesViewModel}"
+             mc:Ignorable="d"
+             d:Background="Wheat">
+    <UserControl.Resources>
+        <commn:BindingProxy x:Key="BindingProxy"
+                            Data="{Binding}" />
+    </UserControl.Resources>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+        <TabControl>
+            <TabItem Header="总设置">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid Margin=" 5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="主标题：" />
+                        <TextBlock Grid.Row="1"
+                                   Text="副标题：" />
+                        <TextBlock Grid.Column="2"
+                                   Text="下轴标题：" />
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="2"
+                                   Text="左轴标题：" />
+                        <TextBox Grid.Column="1"
+                                 md:HintAssist.Hint="主标题"
+                                 Text="{Binding Model.PlotModelTitle}" />
+                        <TextBox Grid.Column="1"
+                                 Grid.Row="1"
+                                 md:HintAssist.Hint="副标题"
+                                 Text="{Binding Model.PlotModelSubTitle}" />
+                        <TextBox Grid.Column="3"
+                                 md:HintAssist.Hint="下标题"
+                                 Text="{Binding Model.BottomAxisProperty.AxisTitle}" />
+                        <TextBox Grid.Column="3"
+                                 Grid.Row="1"
+                                 md:HintAssist.Hint="上标题"
+                                 Text="{Binding Model.LeftAxisProperty.AxisTitle}" />
+                    </Grid>
+
+                    <GroupBox Grid.Row="1">
+                        <GroupBox.Header>
+                            <DockPanel Height="10">
+                                <Button HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Height="25"
+                                        Width="25"
+                                        ToolTip="添加"
+                                        Content="{md:PackIcon Kind=Add}"
+                                        Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                        Command="{Binding AddLineSeriesCommand}" />
+                                <Button HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Height="25"
+                                        Width="25"
+                                        ToolTip="移除所选中项"
+                                        Content="{md:PackIcon Kind=Close}"
+                                        Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                        CommandParameter="{Binding ElementName=dataGrid,Path=SelectedItem}"
+                                        Command="{Binding RemoveLineSeriesCommand}" />
+                            </DockPanel>
+                        </GroupBox.Header>
+
+                        <DataGrid Name="dataGrid"
+                                  ItemsSource="{Binding Model.ThreeColorLineSeriesProperty}"
+                                  CanUserSortColumns="False"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <md:DataGridComboBoxColumn Header="使用表"
+                                                           MinWidth="60"
+                                                           SelectedValuePath="DataTableName"
+                                                           DisplayMemberPath="DataTableName"
+                                                           ItemsSourceBinding="{Binding DataContext.DataTableInfos,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
+                                                           SelectedValueBinding="{Binding TableName,UpdateSourceTrigger=PropertyChanged}" />
+                                <md:DataGridComboBoxColumn Header="X轴"
+                                                           MinWidth="60"
+                                                           SelectedItemBinding="{Binding ColumnNameX,UpdateSourceTrigger=PropertyChanged}">
+                                    <md:DataGridComboBoxColumn.ElementStyle>
+                                        <Style TargetType="ComboBox"
+                                               BasedOn="{StaticResource MaterialDesignComboBox}">
+                                            <Setter Property="ItemsSource"
+                                                    Value="{Binding XColumnNameSource}" />
+                                        </Style>
+                                    </md:DataGridComboBoxColumn.ElementStyle>
+                                    <md:DataGridComboBoxColumn.EditingElementStyle>
+                                        <Style TargetType="ComboBox"
+                                               BasedOn="{StaticResource MaterialDesignComboBox}">
+                                            <Setter Property="ItemsSource"
+                                                    Value="{Binding XColumnNameSource}" />
+                                        </Style>
+                                    </md:DataGridComboBoxColumn.EditingElementStyle>
+                                </md:DataGridComboBoxColumn>
+                                <md:DataGridComboBoxColumn Header="Y轴"
+                                                           MinWidth="60"
+                                                           SelectedItemBinding="{Binding ColumnNameY,UpdateSourceTrigger=PropertyChanged}">
+                                    <md:DataGridComboBoxColumn.ElementStyle>
+                                        <Style TargetType="ComboBox"
+                                               BasedOn="{StaticResource MaterialDesignComboBox}">
+                                            <Setter Property="ItemsSource"
+                                                    Value="{Binding YColumnNameSource}" />
+                                        </Style>
+                                    </md:DataGridComboBoxColumn.ElementStyle>
+                                    <md:DataGridComboBoxColumn.EditingElementStyle>
+                                        <Style TargetType="ComboBox"
+                                               BasedOn="{StaticResource MaterialDesignComboBox}">
+                                            <Setter Property="ItemsSource"
+                                                    Value="{Binding YColumnNameSource}" />
+                                        </Style>
+                                    </md:DataGridComboBoxColumn.EditingElementStyle>
+                                </md:DataGridComboBoxColumn>
+                                <DataGridTextColumn EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                                    ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                                    Header="标签"
+                                                    MinWidth="60"
+                                                    Binding="{Binding Title}" />
+
+                                <DataGridTextColumn EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                                    ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                                    Header="下限"
+                                                    MinWidth="60"
+                                                    Binding="{Binding LimitLo}" />
+                                <DataGridTextColumn EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                                    ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                                    Header="下限"
+                                                    MinWidth="60"
+                                                    Binding="{Binding LimitHi}" />
+                                <DataGridCheckBoxColumn EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}"
+                                                        ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                                                        Header="显示上下限横线"
+                                                        MinWidth="60"
+                                                        Binding="{Binding IsLimitLineVisibility}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="折线设置">
+                <ScrollViewer HorizontalScrollBarVisibility="auto"
+                              VerticalScrollBarVisibility="Auto">
+                    <TabControl ItemsSource="{Binding Model.ThreeColorLineSeriesProperty}"
+                                Visibility="{Binding Model.ThreeColorLineSeriesProperty.Count,Converter={StaticResource ZeroIntToUnVisibility}}"
+                                Style="{StaticResource MaterialDesignFilledTabControl}">
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}"
+                                           ToolTip="{Binding Title}" />
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Margin="5">
+                                        <local:uclLineSeriesView />
+                                    </StackPanel>
+
+                                    <StackPanel Margin="5"
+                                                Grid.Column="1">
+                                        <Grid Margin="0 3 0 0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="低界限值："
+                                                       VerticalAlignment="Center" />
+                                            <TextBox  Grid.Column="1"
+                                                      Margin="3 0 0 0"
+                                                      Text="{Binding LimitLo}" />
+                                        </Grid>
+
+                                        <Grid Margin="0 3 0 0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="80*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="低界限颜色："
+                                                       VerticalAlignment="Center" />
+                                            <ComboBox Grid.Column="1"
+                                                      Margin="0 3 0 0"
+                                                      ItemsSource="{Binding Source={StaticResource ColorsCollection}}"
+                                                      ItemTemplate="{StaticResource colorTemplate}"
+                                                      SelectedItem="{Binding ColorLo,Converter={StaticResource PropertyInfoToOxyColor}}" />
+                                        </Grid>
+
+                                        <Grid Margin="0 3 0 0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="80*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="低界限线样式："
+                                                       VerticalAlignment="Center" />
+                                            <ComboBox Grid.Column="1"
+                                                      Margin="3 0 0 0"
+                                                      ItemsSource="{Binding Source={ex:EnumBindingSource {x:Type oxy:LineStyle}}}"
+                                                      SelectedItem="{Binding LineStyleLo}" />
+                                        </Grid>
+                                        <Grid Margin="0 3 0 0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="80*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="高界限值："
+                                                       VerticalAlignment="Center" />
+                                            <TextBox  Grid.Column="1"
+                                                      Margin="3 0 0 0"
+                                                      Text="{Binding LimitHi}" />
+                                        </Grid>
+
+                                        <Grid Margin="0 3 0 0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="80*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="高界限颜色："
+                                                       VerticalAlignment="Center" />
+                                            <ComboBox Grid.Column="1"
+                                                      Margin="0 3 0 0"
+                                                      ItemsSource="{Binding Source={StaticResource ColorsCollection}}"
+                                                      ItemTemplate="{StaticResource colorTemplate}"
+                                                      SelectedItem="{Binding ColorHi,Converter={StaticResource PropertyInfoToOxyColor}}" />
+                                        </Grid>
+
+                                        <Grid Margin="0 3 0 0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="80*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="高界限线样式："
+                                                       VerticalAlignment="Center" />
+                                            <ComboBox Grid.Column="1"
+                                                      Margin="3 0 0 0"
+                                                      ItemsSource="{Binding Source={ex:EnumBindingSource {x:Type oxy:LineStyle}}}"
+                                                      SelectedItem="{Binding LineStyleHi}" />
+                                        </Grid>
+                                        <Grid Margin="5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="80*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="显示范围线："
+                                                       VerticalAlignment="Center" />
+                                            <CheckBox Grid.Column="1"
+                                                      IsChecked="{Binding IsLimitLineVisibility}"
+                                                      Style="{StaticResource MaterialDesignDarkCheckBox}" />
+                                        </Grid>
+
+                                        <Grid Margin="0 10 0 0"
+                                              HorizontalAlignment="Right">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </TabControl>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="左坐标轴">
+                <local:uclAxisView DataContext="{Binding Model.LeftAxisProperty}"
+                                   Margin="3 0 0 0" />
+            </TabItem>
+            <TabItem Header="下坐标轴">
+                <local:uclAxisView DataContext="{Binding Model.BottomAxisProperty}"
+                                   Margin="3 0 0 0" />
+            </TabItem>
+            <TabItem Header="图例">
+                <local:uclLegendView DataContext="{Binding Model.LegendProperty}"
+                                     Margin="3 0 0 0" />
+            </TabItem>
+        </TabControl>
+    </ScrollViewer>
+</UserControl>

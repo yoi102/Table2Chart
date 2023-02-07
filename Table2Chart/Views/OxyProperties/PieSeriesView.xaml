@@ -1,0 +1,352 @@
+﻿<UserControl x:Class="Table2Chart.Views.OxyProperties.PieSeriesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Table2Chart.Views.OxyProperties"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:commn="clr-namespace:Table2Chart.Common"
+             xmlns:series="clr-namespace:Table2Chart.Common.Models.OxyModels.Series"
+             xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:oxyproperties="clr-namespace:Table2Chart.ViewModels.OxyProperties"
+             d:DataContext="{d:DesignInstance Type=oxyproperties:PieSeriesViewModel}"
+             mc:Ignorable="d"
+             d:Background="Wheat"
+             d:DesignHeight="500"
+             d:DesignWidth="500">
+    <UserControl.Resources>
+        <commn:BindingProxy x:Key="BindingProxy"
+                            Data="{Binding}" />
+    </UserControl.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto">
+
+        <TabControl  Style="{StaticResource MaterialDesignTabControlBase}">
+            <TabItem Header="总设置">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+
+                        <Grid Margin=" 5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="主标题：" />
+                            <TextBlock Grid.Row="1"
+                                       Text="副标题：" />
+                            <TextBlock Grid.Column="2"
+                                       Text="下轴标题：" />
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="2"
+                                       Text="左轴标题：" />
+                            <TextBox Grid.Column="1"
+                                     md:HintAssist.Hint="主标题"
+                                     Text="{Binding Model.PlotModelTitle}" />
+                            <TextBox Grid.Column="1"
+                                     Grid.Row="1"
+                                     md:HintAssist.Hint="副标题"
+                                     Text="{Binding Model.PlotModelSubTitle}" />
+                            <TextBox Grid.Column="3"
+                                     md:HintAssist.Hint="下标题"
+                                     Text="{Binding Model.BottomAxisProperty.AxisTitle}" />
+                            <TextBox Grid.Column="3"
+                                     Grid.Row="1"
+                                     md:HintAssist.Hint="上标题"
+                                     Text="{Binding Model.LeftAxisProperty.AxisTitle}" />
+                        </Grid>
+
+                        <Grid Margin="5 3 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="80*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="显示坐标轴："
+                                       FontWeight="Black"
+                                       VerticalAlignment="Center" />
+                            <CheckBox  Grid.Column="1"
+                                       HorizontalAlignment="Left"
+                                       Content="{md:PackIcon Kind=EyeOff}"
+                                       Style="{StaticResource MaterialDesignActionToggleButton}"
+                                       md:ToggleButtonAssist.OnContent="{md:PackIcon Kind=Eye}"
+                                       IsChecked="{Binding Model.SetAxis}" />
+                        </Grid>
+
+                        <StackPanel Margin="5"
+                                    Orientation="Horizontal">
+                            <Grid MinWidth="120">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="80*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="选择表："
+                                           FontWeight="Black"
+                                           VerticalAlignment="Center" />
+                                <ComboBox Grid.Column="1"
+                                          SelectedValuePath="DataTableName"
+                                          DisplayMemberPath="DataTableName"
+                                          ItemsSource="{Binding  DataTableInfos}"
+                                          SelectedValue="{Binding Model.PieSeriesProperty.TableName}" />
+                            </Grid>
+
+                            <Grid Margin="20 0"
+                                  MinWidth="120">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="80*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="所测列："
+                                           FontWeight="Black"
+                                           VerticalAlignment="Center" />
+                                <ComboBox Grid.Column="1"
+                                          SelectedValuePath="Name"
+                                          DisplayMemberPath="Name"
+                                          ItemsSource="{Binding  ColumnInfos}"
+                                          SelectedValue="{Binding Model.PieSeriesProperty.ColumnName}" />
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <GroupBox Grid.Row="1">
+                        <GroupBox.Header>
+                            <DockPanel Height="10">
+                                <Button HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Height="25"
+                                        Width="25"
+                                        ToolTip="添加"
+                                        Content="{md:PackIcon Kind=Add}"
+                                        Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                        Command="{Binding AddPieSeriesPieSliceCommand}" />
+                                <Button HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Height="25"
+                                        Width="25"
+                                        ToolTip="移除所选中项"
+                                        Content="{md:PackIcon Kind=Close}"
+                                        Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                        CommandParameter="{Binding ElementName=dataGrid,Path=SelectedItem}"
+                                        Command="{Binding RemovePieSeriesPieSliceCommand}" />
+                            </DockPanel>
+                        </GroupBox.Header>
+
+                        <DataGrid Name="dataGrid"
+                                  AutoGenerateColumns="False"
+                                  CanUserSortColumns="False"
+                                  CanUserAddRows="False"
+                                  ItemsSource="{Binding Model.PieSeriesProperty.PieSlice}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="标签"
+                                                    MinWidth="60"
+                                                    EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                                    ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                                    Binding="{Binding Label}" />
+                                <DataGridTextColumn Header="测量区间下限"
+                                                    MinWidth="60"
+                                                    EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                                    ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                                    Binding="{Binding PieLimitLoValue}" />
+                                <DataGridTextColumn Header="测量区间上限"
+                                                    MinWidth="60"
+                                                    EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                                    ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                                    Binding="{Binding PieLimitHiValue}" />
+                                <DataGridComboBoxColumn Header="颜色"
+                                                        ItemsSource="{Binding Source={StaticResource ColorsCollection}}"
+                                                        SelectedItemBinding="{Binding Fill,Converter={StaticResource PropertyInfoToOxyColor}}">
+                                    <DataGridComboBoxColumn.ElementStyle>
+                                        <Style TargetType="ComboBox"
+                                               BasedOn="{StaticResource MaterialDesignComboBox}">
+                                            <Setter Property="ItemTemplate"
+                                                    Value="{StaticResource colorTemplate}" />
+                                        </Style>
+                                    </DataGridComboBoxColumn.ElementStyle>
+                                    <DataGridComboBoxColumn.EditingElementStyle>
+                                        <Style TargetType="ComboBox"
+                                               BasedOn="{StaticResource MaterialDesignComboBox}">
+                                            <Setter Property="ItemTemplate"
+                                                    Value="{StaticResource colorTemplate}" />
+                                        </Style>
+                                    </DataGridComboBoxColumn.EditingElementStyle>
+                                </DataGridComboBoxColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="饼设置">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="3">
+
+                        <Grid Margin="0 3 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="80*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="边缘线厚度："
+                                       VerticalAlignment="Center" />
+                            <TextBox  Grid.Column="1"
+                                      Margin="3 0 0 0"
+                                      Text="{Binding Model.PieSeriesProperty.StrokeThickness}" />
+                        </Grid>
+                        <Grid Margin="0 3 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="80*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="标签离中心距离："
+                                       VerticalAlignment="Center" />
+                            <TextBox  Grid.Column="1"
+                                      Margin="3 0 0 0"
+                                      Text="{Binding Model.PieSeriesProperty.InsideLabelPosition}" />
+                        </Grid>
+                        <Grid Margin="0 3 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="80*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="角跨度："
+                                       VerticalAlignment="Center" />
+                            <TextBox  Grid.Column="1"
+                                      Margin="3 0 0 0"
+                                      Text="{Binding Model.PieSeriesProperty.AngleSpan}" />
+                        </Grid>
+                        <Grid Margin="0 3 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="80*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="开始角度："
+                                       VerticalAlignment="Center" />
+                            <TextBox  Grid.Column="1"
+                                      Margin="3 0 0 0"
+                                      Text="{Binding Model.PieSeriesProperty.StartAngle}" />
+                        </Grid>
+                    </StackPanel>
+
+                    <TabControl Grid.Row="1"
+                                Style="{StaticResource MaterialDesignFilledTabControl}"
+                                ItemsSource="{Binding Model.PieSeriesProperty.PieSlice}">
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Label}"
+                                           ToolTip="{Binding Label}" />
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="5"
+                                            Grid.Row="1">
+                                    <Grid Margin="0 3 0 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="标签："
+                                                   VerticalAlignment="Center" />
+                                        <TextBox  Grid.Column="1"
+                                                  Margin="3 0 0 0"
+                                                  Text="{Binding Label}" />
+                                    </Grid>
+
+                                    <Grid Margin="0 3 0 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="区间下限："
+                                                   VerticalAlignment="Center" />
+                                        <TextBox  Grid.Column="1"
+                                                  Margin="3 0 0 0"
+                                                  Text="{Binding PieLimitLoValue}" />
+                                    </Grid>
+                                    <Grid Margin="0 3 0 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="区间上限："
+                                                   VerticalAlignment="Center" />
+                                        <TextBox  Grid.Column="1"
+                                                  Margin="3 0 0 0"
+                                                  Text="{Binding PieLimitHiValue}" />
+                                    </Grid>
+
+                                    <Grid Margin="0 3 0 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="80*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="填充颜色："
+                                                   VerticalAlignment="Center" />
+                                        <ComboBox Grid.Column="1"
+                                                  Margin="0 3 0 0"
+                                                  ItemsSource="{Binding Source={StaticResource ColorsCollection}}"
+                                                  ItemTemplate="{StaticResource colorTemplate}"
+                                                  SelectedItem="{Binding Fill,Converter={StaticResource PropertyInfoToOxyColor}}" />
+                                    </Grid>
+
+                                    <Grid Margin="0 3 0 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="80*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="IsExploded："
+                                                   VerticalAlignment="Center" />
+                                        <CheckBox Grid.Column="1"
+                                                  Margin="3 0 0 0"
+                                                  IsChecked="{Binding IsExploded}" />
+                                    </Grid>
+
+                                    <Grid Margin="0 3 0 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="80*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="值："
+                                                   VerticalAlignment="Center" />
+                                        <TextBox  Grid.Column="1"
+                                                  Margin="3 0 0 0"
+                                                  IsReadOnly="True"
+                                                  Text="{Binding Value}" />
+                                    </Grid>
+                                </StackPanel>
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="左坐标轴">
+                <local:uclAxisView DataContext="{Binding Model.LeftAxisProperty}"
+                                   Margin="3 0 0 0" />
+            </TabItem>
+            <TabItem Header="下坐标轴">
+                <local:uclAxisView DataContext="{Binding Model.BottomAxisProperty}"
+                                   Margin="3 0 0 0" />
+            </TabItem>
+            <TabItem Header="图例">
+
+                <local:uclLegendView DataContext="{Binding Model.LegendProperty}"
+                                     Margin="3 0 0 0" />
+            </TabItem>
+        </TabControl>
+    </ScrollViewer>
+</UserControl>
