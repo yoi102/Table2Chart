@@ -1,0 +1,731 @@
+﻿<UserControl x:Class="Table2Chart.Views.ExcelReaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:be="clr-namespace:Table2Chart.Behaviors"
+             xmlns:commn="clr-namespace:Table2Chart.Common"
+             xmlns:dataSet="clr-namespace:Table2Chart.Common.Models.MyDataSet"
+             xmlns:controls="clr-namespace:Table2Chart.Controls"
+             xmlns:viewmodels="clr-namespace:Table2Chart.ViewModels"
+             xmlns:local="clr-namespace:Table2Chart.Views"
+             xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
+             d:DataContext="{d:DesignInstance Type=viewmodels:ExcelReaderViewModel}"
+             Background="{DynamicResource MaterialDesignPaper}"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             mc:Ignorable="d"
+             d:DesignHeight="800"
+             d:DesignWidth="1200">
+    <UserControl.Resources>
+        <commn:BindingProxy x:Key="BindingProxy"
+                            Data="{Binding}" />
+        <Style TargetType="DataGrid">
+            <!--网格线颜色-->
+            <Setter Property="CanUserResizeColumns"
+                    Value="True" />
+            <Setter Property="Background"
+                    Value="{DynamicResource MaterialDesignPaper}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource MaterialDesignPaper}" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource MaterialDesignBody}" />
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="{StaticResource MaterialDesignShadow}" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="HorizontalGridLinesBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="{StaticResource MaterialDesignShadow}" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="VerticalGridLinesBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="{StaticResource MaterialDesignShadow}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate DataType="{x:Type dataSet:ColumnInfo}">
+            <GroupBox Visibility="{Binding IsVisible,Converter={StaticResource Bool2Visibility}}">
+
+                <GroupBox.Header>
+                    <DockPanel  Height="12">
+                        <TextBlock DockPanel.Dock="Left"
+                                   Text="{Binding Name}" />
+                    </DockPanel>
+                </GroupBox.Header>
+                <StackPanel>
+                    <!--<Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="80*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="最小值："
+                                   VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding MinValue,StringFormat={}{0:N}}" />
+                    </Grid>
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="80*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="最大值："
+                                   VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding MaxValue,StringFormat={}{0:N}}" />
+                    </Grid>
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="80*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="平均值："
+                                   VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding AverageValue,StringFormat={}{0:N}}" />
+                    </Grid>
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="80*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="总值："
+                                   VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding SumValue,StringFormat={}{0:N}}" />
+                    </Grid>-->
+                    <ItemsControl ItemsSource="{Binding ColumnBaseInfos}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <Grid DockPanel.Dock="Left">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="80*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Description}"
+                                                   FontWeight="Bold"
+                                                   VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1"
+                                                   Margin="5 0"
+                                                   Text=":"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="2"
+                                                   Margin="5 0"
+                                                   Text="{Binding Value,StringFormat={}{0:N}}" />
+                                    </Grid>
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                DockPanel.Dock="Right">
+                                        <Button HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding DataContext.RemoveColumnBaseInfosCommand,
+                                                RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ExcelReaderView}}"
+                                                Content="{md:PackIcon Kind=Close}"
+                                                Style="{StaticResource MaterialDesignToolForegroundButton}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource objectConverter}">
+                                                    <Binding  Path="ItemsSource"
+                                                              RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}" />
+                                                    <Binding />
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <ItemsControl ItemsSource="{Binding ExpressionCalculators}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <Grid Margin="5"
+                                          DockPanel.Dock="Left">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="80*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Title}"
+                                                   FontWeight="Bold"
+                                                   VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1"
+                                                   Margin="5 0"
+                                                   Text=":"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="2"
+                                                   Margin="10 0"
+                                                   Text="{Binding OutputValue,StringFormat={}{0:N}}" />
+                                    </Grid>
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                DockPanel.Dock="Right">
+                                        <Button HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                CommandParameter="{Binding}"
+                                                Command="{Binding DataContext.EditExpressionCalculatorCommand,
+                                                RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ExcelReaderView}}"
+                                                Content="{md:PackIcon Kind=Edit}"
+                                                Style="{StaticResource MaterialDesignToolForegroundButton}" />
+                                        <Button HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding DataContext.RemoveExpressionCalculatorCommand,
+                                                RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ExcelReaderView}}"
+                                                Content="{md:PackIcon Kind=Close}"
+                                                Style="{StaticResource MaterialDesignToolForegroundButton}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource objectConverter}">
+                                                    <Binding Path="ItemsSource"
+                                                             RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}" />
+                                                    <Binding />
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!--<Button Name="addInfoButton"
+                                 Height="120"
+                                 Width="120"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Top"
+                                 HorizontalContentAlignment="Left"
+                                 Padding="1"
+                                 Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}">
+                        -->
+                    <!--<i:Interaction.Behaviors>
+                            <be:ButtonOpenPopupBehavior Popup="{Binding ElementName=addInfoPopup}" />
+                        </i:Interaction.Behaviors>-->
+                    <!--
+                    </Button>-->
+
+                    <md:PopupBox Name="addInfoPopup"
+                                 Width="30"
+                                 Height="20"
+                                 ToolTip="添加信息"
+                                 ToggleContent="添加"
+                                 PlacementMode="BottomAndAlignLeftEdges"
+                                 Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}">
+                        <!--无法使用，不知为何-->
+                        <!--<Popup.Style>
+                            <Style TargetType="Popup">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsMouseOver,ElementName=addInfoButton}"
+                                                 Value="True">
+                                        <Setter Property="IsOpen"
+                                                Value="True" />
+                                    </DataTrigger>
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter Property="IsOpen"
+                                                Value="True" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Popup.Style>-->
+                        <md:PopupBox.Resources>
+                            <sys:String x:Key="Max">Max</sys:String>
+                            <sys:String x:Key="Min">Min</sys:String>
+                            <sys:String x:Key="Median">Median</sys:String>
+                            <sys:String x:Key="Sum">Sum</sys:String>
+                            <sys:String x:Key="Average">Average</sys:String>
+                            <sys:String x:Key="Variance">Variance</sys:String>
+                            <sys:String x:Key="StandardDeviation">StandardDeviation</sys:String>
+                        </md:PopupBox.Resources>
+                        <Menu Background="{DynamicResource MaterialDesignPaper}">
+                            <Menu.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </Menu.ItemsPanel>
+
+                            <MenuItem Header="最大值"
+                                      Icon="{md:PackIcon Kind=AddBold}"
+                                      Command="{Binding Data.AddColumnBaseInfosCommand,Source={StaticResource BindingProxy}}">
+                                <MenuItem.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource objectConverter}">
+                                        <Binding />
+                                        <Binding Source="{StaticResource ResourceKey=Max}" />
+                                    </MultiBinding>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+
+                            <MenuItem Header="最小值"
+                                      Icon="{md:PackIcon Kind=AddBold}"
+                                      Command="{Binding Data.AddColumnBaseInfosCommand,Source={StaticResource BindingProxy}}">
+                                <MenuItem.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource objectConverter}">
+                                        <Binding />
+                                        <Binding Source="{StaticResource ResourceKey=Min}" />
+                                    </MultiBinding>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+
+                            <MenuItem Header="中位数"
+                                      Icon="{md:PackIcon Kind=AddBold}"
+                                      Command="{Binding Data.AddColumnBaseInfosCommand,Source={StaticResource BindingProxy}}">
+                                <MenuItem.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource objectConverter}">
+                                        <Binding />
+                                        <Binding Source="{StaticResource ResourceKey=Median}" />
+                                    </MultiBinding>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+
+                            <MenuItem Header="总和"
+                                      Icon="{md:PackIcon Kind=AddBold}"
+                                      Command="{Binding Data.AddColumnBaseInfosCommand,Source={StaticResource BindingProxy}}">
+                                <MenuItem.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource objectConverter}">
+                                        <Binding />
+                                        <Binding Source="{StaticResource ResourceKey=Sum}" />
+                                    </MultiBinding>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+
+                            <MenuItem Header="平均值"
+                                      Icon="{md:PackIcon Kind=AddBold}"
+                                      Command="{Binding Data.AddColumnBaseInfosCommand,Source={StaticResource BindingProxy}}">
+                                <MenuItem.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource objectConverter}">
+                                        <Binding />
+                                        <Binding Source="{StaticResource ResourceKey=Average}" />
+                                    </MultiBinding>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+
+                            <MenuItem Header="方差"
+                                      Icon="{md:PackIcon Kind=AddBold}"
+                                      Command="{Binding Data.AddColumnBaseInfosCommand,Source={StaticResource BindingProxy}}">
+                                <MenuItem.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource objectConverter}">
+                                        <Binding />
+                                        <Binding Source="{StaticResource ResourceKey=Variance}" />
+                                    </MultiBinding>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+
+                            <MenuItem Header="标准差"
+                                      Icon="{md:PackIcon Kind=AddBold}"
+                                      Command="{Binding Data.AddColumnBaseInfosCommand,Source={StaticResource BindingProxy}}">
+                                <MenuItem.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource objectConverter}">
+                                        <Binding />
+                                        <Binding Source="{StaticResource ResourceKey=StandardDeviation}" />
+                                    </MultiBinding>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+
+                            <MenuItem Header="自定义信息"
+                                      Icon="{md:PackIcon Kind=AddBold}"
+                                      CommandParameter="{Binding}"
+                                      Command="{Binding Data.AddColumnInfoCommand,Source={StaticResource BindingProxy}}" />
+                        </Menu>
+                    </md:PopupBox>
+                </StackPanel>
+            </GroupBox>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <md:DrawerHost>
+        <Grid Grid.Row="1"
+              Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="15*" />
+                <ColumnDefinition Width="60*"
+                                  MinWidth="100" />
+                <ColumnDefinition Width="20*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <!--<Button md:ButtonProgressAssist.IsIndeterminate="True"
+                        md:ButtonProgressAssist.IsIndicatorVisible="True"
+                        md:ButtonProgressAssist.Value="-1"
+                        md:RippleAssist.Feedback="#DD000000"
+                        HorizontalAlignment="Left"
+                        Margin="5"
+                        Width="50"
+                        Content="{md:PackIcon FileSearch}"
+                        Command="{Binding ExecuteCommand}"
+                        CommandParameter="OpenExcelFile" />-->
+                <Button  HorizontalAlignment="Left"
+                         Margin="5"
+                         Width="50"
+                         Content="{md:PackIcon Kind=FileEdit}"
+                         Command="{Binding ExecuteCommand}"
+                         CommandParameter="OpenExcelFile" />
+
+                <!--没有项的时候显示-->
+                <StackPanel Grid.Row=" 1"
+                            VerticalAlignment="Center"
+                            Visibility="{Binding DataTableInfos.Count ,Converter={StaticResource ZeroIntToVisibility}}">
+
+                    <TextBlock Text="待添加，点击右键或按钮添加"
+                               TextWrapping="Wrap"
+                               Margin="0 10"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
+
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding DataTableInfos}"
+                         Margin="0 0 5 0"
+                         SelectedItem="{Binding SelectedDataTableInfo,Mode=TwoWay}"
+                         SelectionMode="Single"
+                         dd:DragDrop.DropTargetAdornerBrush="Coral"
+                         dd:DragDrop.IsDragSource="True"
+                         dd:DragDrop.IsDropTarget="True"
+                         dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                         dd:DragDrop.UseDefaultDragAdorner="True">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="添加"
+                                      Icon="{md:PackIcon Kind=AddBox}"
+                                      CommandParameter="OpenExcelFile"
+                                      Command="{Binding Data.ExecuteCommand ,Source={StaticResource BindingProxy}}" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction  Command="{Binding ClearAllFiltersCommand}">
+                                <i:InvokeCommandAction.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource objectConverter}">
+                                        <Binding  ElementName="DataGrid" />
+                                        <Binding  ElementName="GlobalFilter" />
+                                    </MultiBinding>
+                                </i:InvokeCommandAction.CommandParameter>
+                            </i:InvokeCommandAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="BorderThickness"
+                                    Value="0" />
+                            <Setter Property="Background"
+                                    Value="Transparent" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Grid>
+                                            <Border Name="border" />
+                                            <ContentPresenter />
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected"
+                                                     Value="True">
+                                                <Setter Property="Background"
+                                                        TargetName="border"
+                                                        Value="Transparent" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <RadioButton Style="{StaticResource RadioButtonStyle}"
+                                         MouseDown="RadioButton_MouseDown"
+                                         Foreground="{StaticResource MaterialDesignBody}">
+                                <RadioButton.IsChecked>
+                                    <Binding Path="IsSelected"
+                                             RelativeSource="{RelativeSource AncestorType=ListBoxItem}"
+                                             Mode="TwoWay" />
+                                </RadioButton.IsChecked>
+                                <DockPanel Background="Transparent">
+                                    <Button Panel.ZIndex="1"
+                                            DockPanel.Dock="Left"
+                                            Style="{StaticResource MaterialDesignToolButton}"
+                                            ToolTip="找不到对应表"
+                                            Foreground="Red"
+                                            Visibility="{Binding DataTable , Converter={StaticResource NullToVisibility}, ConverterParameter=1}"
+                                            Content="{md:PackIcon Kind=Warning, Size=20 }">
+                                        <!--<Button.Style>
+                                            <Style TargetType="Button"
+                                                   BasedOn="{StaticResource MaterialDesignToolButton}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DataTable}"
+                                                                 Value="{x:Null}">
+                                                        <Setter Property="Visibility"
+                                                                Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>-->
+                                    </Button>
+                                    <TextBlock Margin="10 0"
+                                               DockPanel.Dock="Left"
+                                               Foreground="{DynamicResource MaterialDesignBody}"
+                                               Text="{Binding DataTableName}" />
+                                </DockPanel>
+                                <RadioButton.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="删除"
+                                                  Icon="{md:PackIcon Kind=Delete}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ContextMenu} }, Path=PlacementTarget.DataContext}"
+                                                  Command="{Binding Data.RemoveCurrentDataTableInfoCommand ,Source={StaticResource BindingProxy}}" />
+                                    </ContextMenu>
+                                </RadioButton.ContextMenu>
+                            </RadioButton>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+
+            <GridSplitter Background="{DynamicResource AttentionToActionBrush}"
+                          Width="3"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Stretch" />
+
+            <Grid Grid.Column="1"
+                  Margin="0 0 5 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <DockPanel Margin="10">
+                    <TextBox MinWidth="150"
+                             DockPanel.Dock="Left"
+                             x:Name="GlobalFilter"
+                             md:TextFieldAssist.HasClearButton="True"
+                             md:HintAssist.Hint="搜索"
+                             ToolTip="输入内容进行搜索">
+                    </TextBox>
+
+                    <TextBlock DockPanel.Dock="Right"
+                               HorizontalAlignment="Right"
+                               Text="{Binding SelectedDataTableInfo.FilePath,StringFormat=文件路径：{0}}" />
+
+                    <!--<Button Content="{md:PackIcon Kind=Broom}"
+                                        Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                        Command="{Binding ClearAllFiltersCommand}"
+                                        ToolTip="清除条件"
+                                        Margin="3">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource objectConverter}">
+                                            <Binding  ElementName="DataGrid" />
+                                            <Binding  ElementName="GlobalFilter" />
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>-->
+                </DockPanel>
+
+                <DataGrid Name="DataGrid"
+                          Grid.Row="1"
+                          IsReadOnly="True"
+                          HeadersVisibility="Column"
+                          ItemsSource="{Binding DisplayDataTableView}"
+                          AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"
+                          AutoGeneratedColumns="DataGrid_AutoGeneratedColumns"
+                          EnableColumnVirtualization="True"
+                          dgx:DataGridFilter.ContentFilterFactory="{x:Static dgx:RegexContentFilterFactory.Default}"
+                          dgx:DataGridFilter.IsAutoFilterEnabled="True"
+                          dgx:DataGridFilter.StartFilteringKeyGesture="Ctrl+F">
+                    <DataGrid.Resources>
+                        <!-- Override the filter icon used in the default templates with a fat orange symbol; active for this grid only -->
+                        <ControlTemplate x:Key="{x:Static dgx:DataGridFilter.TextColumnFilterTemplateKey}">
+                            <!--<Control Template="{StaticResource dgx:Customized2View.FilterWithPopup}">-->
+
+                            <controls:FilterWithPopupControl Caption="上下限筛选："
+                                                             Foreground="Black"
+                                                             Filter="{Binding Path=Filter, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=dgx:DataGridFilterColumnControl}}" />
+                        </ControlTemplate>
+                    </DataGrid.Resources>
+                    <i:Interaction.Behaviors>
+                        <be:DataGridFilterBehavior GrobalFilterText="{Binding ElementName=GlobalFilter,Mode=TwoWay,Path=Text,UpdateSourceTrigger=PropertyChanged}" />
+                    </i:Interaction.Behaviors>
+                </DataGrid>
+            </Grid>
+
+            <GridSplitter Grid.Column="2"
+                          Background="{DynamicResource AttentionToActionBrush}"
+                          Width="3"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Stretch" />
+
+            <Grid Grid.Column="2"
+                  Margin="5 0 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <DockPanel>
+                    <md:PopupBox ToggleContent="{md:PackIcon Kind=Account}"
+                                 DockPanel.Dock="Left"
+                                 HorizontalAlignment="Left">
+                        <ItemsControl   ItemsSource="{Binding SelectedDataTableInfo.CompareColumnInfos}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Margin="10" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding TableName}"
+                                              IsChecked="{Binding IsVisible}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </md:PopupBox>
+                </DockPanel>
+
+                <Grid Grid.Row="1">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer Grid.Row="1"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel>
+                                <md:ColorZone md:ElevationAssist.Elevation="Dp2"
+                                              Height="30"
+                                              Margin="0 5"
+                                              Mode="SecondaryDark"
+                                              DockPanel.Dock="Top">
+                                    <DockPanel>
+
+                                        <TextBlock Margin="10 0 0 0"
+                                                   DockPanel.Dock="Left"
+                                                   Text="{Binding SelectedDataTableInfo.DataTable.TableName,StringFormat={}{0}--当前}" />
+                                        <md:PopupBox ToggleContent="{md:PackIcon Kind=Eye}"
+                                                     Margin=" 10 0"
+                                                     DockPanel.Dock="Right">
+                                            <ItemsControl ItemsSource="{Binding SelectedDataTableInfo.ColumnInfos}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Margin="10" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox Content="{Binding Name}"
+                                                                  IsChecked="{Binding IsVisible}">
+                                                        </CheckBox>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </md:PopupBox>
+                                    </DockPanel>
+                                </md:ColorZone>
+
+                                <ItemsControl ItemsSource="{Binding SelectedDataTableInfo.ColumnInfos}"
+                                              dd:DragDrop.DragDropCopyKeyState="ControlKey"
+                                              dd:DragDrop.DropTargetAdornerBrush="Coral"
+                                              dd:DragDrop.IsDragSource="True"
+                                              dd:DragDrop.IsDropTarget="True"
+                                              dd:DragDrop.DragDropContext="{Binding SelectedDataTableInfo.DataTable.TableName}"
+                                              dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                                              dd:DragDrop.UseDefaultDragAdorner="True">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </StackPanel>
+
+                            <ItemsControl ItemsSource="{Binding SelectedDataTableInfo.CompareColumnInfos}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Visibility="{Binding IsVisible,Converter={StaticResource Bool2Visibility}}">
+                                            <md:ColorZone md:ElevationAssist.Elevation="Dp2"
+                                                          Height="30"
+                                                          Margin="0 5"
+                                                          Mode="SecondaryLight"
+                                                          DockPanel.Dock="Top">
+                                                <DockPanel>
+                                                    <TextBlock Margin="10 0 0 0 "
+                                                               DockPanel.Dock="Left"
+                                                               Text="{Binding TableName,StringFormat={}{0}--对比}" />
+                                                    <md:PopupBox ToggleContent="{md:PackIcon Kind=Eye}"
+                                                                 Margin=" 10 0"
+                                                                 DockPanel.Dock="Right">
+                                                        <ItemsControl ItemsSource="{Binding ColumnInfos}">
+                                                            <ItemsControl.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <StackPanel Margin="10" />
+                                                                </ItemsPanelTemplate>
+                                                            </ItemsControl.ItemsPanel>
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <CheckBox Content="{Binding Name}"
+                                                                              IsChecked="{Binding IsVisible}">
+                                                                    </CheckBox>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </md:PopupBox>
+                                                </DockPanel>
+                                            </md:ColorZone>
+                                            <ItemsControl ItemsSource="{Binding ColumnInfos}"
+                                                          dd:DragDrop.DropTargetAdornerBrush="Coral"
+                                                          dd:DragDrop.IsDragSource="True"
+                                                          dd:DragDrop.IsDropTarget="True"
+                                                          dd:DragDrop.DragDropContext="{Binding TableName}"
+                                                          dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                                                          dd:DragDrop.UseDefaultDragAdorner="True">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+        </Grid>
+    </md:DrawerHost>
+</UserControl>

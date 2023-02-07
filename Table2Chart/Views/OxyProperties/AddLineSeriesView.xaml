@@ -1,0 +1,173 @@
+﻿<UserControl x:Class="Table2Chart.Views.OxyProperties.AddLineSeriesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Table2Chart.Views.OxyProperties"
+             xmlns:oxyproperties="clr-namespace:Table2Chart.ViewModels.OxyProperties"
+             d:DataContext="{d:DesignInstance Type=oxyproperties:AddLineSeriesViewModel}"
+             d:Background="Wheat"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="添加折线图"
+                   HorizontalAlignment="Left" />
+        <Button HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                ToolTip="关闭"
+                Command="{Binding CancelCommand}"
+                Content="{md:PackIcon Kind=WindowClose}"
+                Style="{StaticResource MaterialDesignToolForegroundButton}" />
+
+        <Grid Grid.Row="1"
+              Margin=" 5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Text="主标题：" />
+            <TextBlock Grid.Row="1"
+                       Text="副标题：" />
+            <TextBlock Grid.Column="2"
+                       Text="下轴标题：" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="2"
+                       Text="左轴标题：" />
+            <TextBox Grid.Column="1"
+                     md:HintAssist.Hint="主标题"
+                     Text="{Binding MyPlotModel.PlotModelTitle}" />
+            <TextBox Grid.Column="1"
+                     Grid.Row="1"
+                     md:HintAssist.Hint="副标题"
+                     Text="{Binding MyPlotModel.PlotModelSubTitle}" />
+            <TextBox Grid.Column="3"
+                     md:HintAssist.Hint="下标题"
+                     Text="{Binding MyPlotModel.BottomAxisProperty.AxisTitle}" />
+            <TextBox Grid.Column="3"
+                     Grid.Row="1"
+                     md:HintAssist.Hint="上标题"
+                     Text="{Binding MyPlotModel.LeftAxisProperty.AxisTitle}" />
+        </Grid>
+        <StackPanel Grid.Row="2">
+            <GroupBox>
+                <GroupBox.Header>
+                    <DockPanel Height="15">
+                        <Button HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Height="25"
+                                Width="25"
+                                ToolTip="添加"
+                                Content="{md:PackIcon Kind=Add}"
+                                Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                Command="{Binding AddLineSeriesCommand}" />
+                        <Button HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Height="25"
+                                Width="25"
+                                ToolTip="移除所选中项"
+                                Content="{md:PackIcon Kind=Close}"
+                                Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                CommandParameter="{Binding ElementName=dataGrid,Path=SelectedItem}"
+                                Command="{Binding RemoveLineSeriesCommand}" />
+                    </DockPanel>
+                </GroupBox.Header>
+
+                <DataGrid Name="dataGrid"
+                          ItemsSource="{Binding MyPlotModel.ThreeColorLineSeriesProperty}"
+                          CanUserSortColumns="False"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <md:DataGridComboBoxColumn Header="使用表"
+                                                   MinWidth="60"
+                                                   SelectedValuePath="DataTableName"
+                                                   DisplayMemberPath="DataTableName"
+                                                   ItemsSourceBinding="{Binding DataContext.DataTableInfos,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
+                                                   SelectedValueBinding="{Binding TableName,UpdateSourceTrigger=PropertyChanged}" />
+                        <md:DataGridComboBoxColumn Header="X轴"
+                                                   MinWidth="60"
+                                                   SelectedItemBinding="{Binding ColumnNameX,UpdateSourceTrigger=PropertyChanged}">
+                            <md:DataGridComboBoxColumn.ElementStyle>
+                                <Style TargetType="ComboBox"
+                                       BasedOn="{StaticResource MaterialDesignComboBox}">
+                                    <Setter Property="ItemsSource"
+                                            Value="{Binding XColumnNameSource}" />
+
+                                </Style>
+                            </md:DataGridComboBoxColumn.ElementStyle>
+                            <md:DataGridComboBoxColumn.EditingElementStyle>
+                                <Style TargetType="ComboBox"
+                                       BasedOn="{StaticResource MaterialDesignComboBox}">
+                                    <Setter Property="ItemsSource"
+                                            Value="{Binding XColumnNameSource}" />
+                                </Style>
+                            </md:DataGridComboBoxColumn.EditingElementStyle>
+                        </md:DataGridComboBoxColumn>
+                        <md:DataGridComboBoxColumn Header="Y轴"
+                                                   MinWidth="60"
+                                                   SelectedItemBinding="{Binding ColumnNameY,UpdateSourceTrigger=PropertyChanged}">
+                            <md:DataGridComboBoxColumn.ElementStyle>
+                                <Style TargetType="ComboBox"
+                                       BasedOn="{StaticResource MaterialDesignComboBox}">
+                                    <Setter Property="ItemsSource"
+                                            Value="{Binding YColumnNameSource}" />
+                                </Style>
+                            </md:DataGridComboBoxColumn.ElementStyle>
+                            <md:DataGridComboBoxColumn.EditingElementStyle>
+                                <Style TargetType="ComboBox"
+                                       BasedOn="{StaticResource MaterialDesignComboBox}">
+                                    <Setter Property="ItemsSource"
+                                            Value="{Binding YColumnNameSource}" />
+                                </Style>
+                            </md:DataGridComboBoxColumn.EditingElementStyle>
+                        </md:DataGridComboBoxColumn>
+                        <DataGridTextColumn EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                            ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                            Header="标签"
+                                            MinWidth="60"
+                                            Binding="{Binding Title}" />
+
+                        <DataGridTextColumn EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                            ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                            Header="下限"
+                                            MinWidth="60"
+                                            Binding="{Binding LimitLo}" />
+                        <DataGridTextColumn EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                            ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                            Header="下限"
+                                            MinWidth="60"
+                                            Binding="{Binding LimitHi}" />
+                        <DataGridCheckBoxColumn EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}"
+                                                ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                                                Header="显示上下限横线"
+                                                MinWidth="60"
+                                                Binding="{Binding IsLimitLineVisibility}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+        </StackPanel>
+
+        <Button Margin="3"
+                Grid.Row="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                ToolTip="确认添加"
+                Command="{Binding SaveCommand}"
+                Content="确定"
+                Style="{StaticResource MaterialDesignOutlinedDarkButton}" />
+    </Grid>
+</UserControl>

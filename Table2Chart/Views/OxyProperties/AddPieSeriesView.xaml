@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="Table2Chart.Views.OxyProperties.AddPieSeriesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Table2Chart.Views.OxyProperties"
+             xmlns:oxyproperties="clr-namespace:Table2Chart.ViewModels.OxyProperties"
+             d:DataContext="{d:DesignInstance Type=oxyproperties:AddPieSeriesViewModel}"
+             d:Background="Wheat"
+             MinWidth="400"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="添加饼图"
+                   HorizontalAlignment="Left" />
+        <Button HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                ToolTip="关闭"
+                Command="{Binding CancelCommand}"
+                Content="{md:PackIcon Kind=WindowClose}"
+                Style="{StaticResource MaterialDesignToolForegroundButton}" />
+        <Button Margin="3"
+                Grid.Row="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                ToolTip="确认添加"
+                Command="{Binding SaveCommand}"
+                Content="确定"
+                Style="{StaticResource MaterialDesignOutlinedDarkButton}" />
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <StackPanel Margin="10 0">
+
+                <Grid Margin="0 2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="80*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="主标题："
+                               FontWeight="Black"
+                               VerticalAlignment="Center" />
+                    <TextBox Grid.Column="1"
+                             md:HintAssist.Hint="主标题"
+                             Text="{Binding MyPlotModel.PlotModelTitle}" />
+                </Grid>
+                <Grid Margin="0 2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="80*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="副标题："
+                               FontWeight="Black"
+                               VerticalAlignment="Center" />
+                    <TextBox Grid.Column="1"
+                             md:HintAssist.Hint="副标题"
+                             Text="{Binding MyPlotModel.PlotModelSubTitle}" />
+                </Grid>
+
+                <Grid Margin="0 2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="80*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="所测表："
+                               FontWeight="Black"
+                               VerticalAlignment="Center" />
+                    <ComboBox Grid.Column="1"
+                              SelectedValuePath="DataTableName"
+                              DisplayMemberPath="DataTableName"
+                              ItemsSource="{Binding  DataTableInfos}"
+                              SelectedValue="{Binding MyPlotModel.PieSeriesProperty.TableName}" />
+                </Grid>
+
+                <Grid Margin="0 2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="80*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="所测列："
+                               FontWeight="Black"
+                               VerticalAlignment="Center" />
+                    <ComboBox Grid.Column="1"
+                              SelectedValuePath="Name"
+                              DisplayMemberPath="Name"
+                              ItemsSource="{Binding  ColumnInfos}"
+                              SelectedValue="{Binding MyPlotModel.PieSeriesProperty.ColumnName}" />
+                </Grid>
+            </StackPanel>
+
+            <GroupBox Grid.Row="1">
+                <GroupBox.Header>
+                    <DockPanel>
+                        <Button HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Height="25"
+                                Width="25"
+                                ToolTip="添加"
+                                Content="{md:PackIcon Kind=Add}"
+                                Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                Command="{Binding AddPieSeriesPieSliceCommand}" />
+                        <Button HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Height="25"
+                                Width="25"
+                                ToolTip="移除所选中项"
+                                Content="{md:PackIcon Kind=Close}"
+                                Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                CommandParameter="{Binding ElementName=dataGrid,Path=SelectedItem}"
+                                Command="{Binding RemovePieSeriesPieSliceCommand}" />
+                    </DockPanel>
+                </GroupBox.Header>
+
+                <DataGrid Name="dataGrid"
+                          AutoGenerateColumns="False"
+                          CanUserSortColumns="False"
+                          CanUserAddRows="False"
+                          ItemsSource="{Binding MyPlotModel.PieSeriesProperty.PieSlice}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="标签"
+                                            MinWidth="60"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                            ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                            Binding="{Binding Label}" />
+                        <DataGridTextColumn Header="测量区间下限"
+                                            MinWidth="60"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                            ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                            Binding="{Binding PieLimitLoValue}" />
+                        <DataGridTextColumn Header="测量区间上限"
+                                            MinWidth="60"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                            ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                            Binding="{Binding PieLimitHiValue}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>

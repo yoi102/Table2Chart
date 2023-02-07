@@ -1,0 +1,107 @@
+﻿<UserControl x:Class="Table2Chart.Views.OxyProperties.uclLegendView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:oxyl="clr-namespace:OxyPlot.Legends;assembly=OxyPlot"
+             xmlns:ex ="clr-namespace:Table2Chart.Extensions"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:Table2Chart.Views.OxyProperties"
+             xmlns:legend="clr-namespace:Table2Chart.Common.Models.OxyModels.Legend"
+             mc:Ignorable="d"
+             d:DesignHeight="400"
+             d:DesignWidth="200">
+    <Grid d:Background="Wheat">
+        <StackPanel>
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="内外侧："
+                           VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1"
+                          SelectedItem="{Binding LegendPlacement}"
+                          ItemsSource="{Binding Source={ex:EnumBindingSource  {x:Type oxyl:LegendPlacement}}}"
+                          Margin="3 0 0 0" />
+            </Grid>
+
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="位置："
+                           VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1"
+                          SelectedItem="{Binding LegendPosition}"
+                          ItemsSource="{Binding Source={ex:EnumBindingSource  {x:Type oxyl:LegendPosition}}}"
+                          Margin="3 0 0 0" />
+            </Grid>
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="取向："
+                           VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1"
+                          SelectedItem="{Binding LegendOrientation}"
+                          ItemsSource="{Binding Source={ex:EnumBindingSource {x:Type oxyl:LegendOrientation}}}"
+                          Margin="3 0 0 0" />
+            </Grid>
+
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="背景颜色："
+                           VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1"
+                          Margin="0 3 0 0"
+                          ItemsSource="{Binding Source={StaticResource ColorsCollection}}"
+                          ItemTemplate="{StaticResource colorTemplate}"
+                          SelectedItem="{Binding LegendBackground ,Converter={StaticResource PropertyInfoToOxyColor}}" />
+            </Grid>
+
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="边框颜色："
+                           VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1"
+                          Margin="0 3 0 0"
+                          ItemsSource="{Binding Source={StaticResource ColorsCollection}}"
+                          ItemTemplate="{StaticResource colorTemplate}"
+                          SelectedItem="{Binding LegendBorder ,Converter={StaticResource PropertyInfoToOxyColor}}" />
+            </Grid>
+
+            <Grid Margin="0 3 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="是否可见："
+                           VerticalAlignment="Center" />
+
+                <ToggleButton Grid.Column="1"
+                              Height="30"
+                              HorizontalAlignment="Left"
+                              md:ToggleButtonAssist.OnContent="{md:PackIcon Kind=Eye}"
+                              Content="{md:PackIcon Kind=EyeOff}"
+                              IsChecked="{Binding IsLegendVisible}"
+                              Style="{StaticResource MaterialDesignActionToggleButton}" />
+                <!--<ToggleButton Grid.Column="1"
+                              Height="30"
+                              md:ToggleButtonAssist.OnContent="{md:PackIcon Kind=EmoticonHappy}"
+                              Content="{md:PackIcon Kind=EyeOutline,Size=20}"
+                              Content="{materialDesign:PackIcon Kind=EmoticonSad}"
+                              IsChecked="{Binding IsLegendVisible}"
+                              Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" />-->
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>

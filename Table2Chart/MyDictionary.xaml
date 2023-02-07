@@ -1,0 +1,412 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:r="clr-namespace:System.Reflection;assembly=mscorlib"
+                    xmlns:color="clr-namespace:Table2Chart.Common.Models.OxyModels.Color"
+                    xmlns:cv="clr-namespace:Table2Chart.Converters">
+
+    <BooleanToVisibilityConverter x:Key="Bool2Visibility" />
+    <cv:ObjectConvert x:Key="objectConverter" />
+
+    <cv:OxyColorToBrushConverter x:Key="OxyColorToBrush" />
+    <cv:PropertyInfoToOxyColorConverter x:Key="PropertyInfoToOxyColor" />
+    <cv:ZeroIntToVisibilityConveter x:Key="ZeroIntToVisibility" />
+    <cv:ZeroIntToUnVisibilityConveter x:Key="ZeroIntToUnVisibility" />
+    <!--<cv:InverseBooleanToVisibilityConverter x:Key="InvBool2Visibility" />-->
+    <cv:EnumDescriptionConverter x:Key="EnumDescription" />
+    <cv:NullToVisibilityConverter x:Key="NullToVisibility" />
+
+    <!--颜色模板-->
+    <DataTemplate x:Key="colorTemplate"
+                  DataType="{x:Type r:PropertyInfo}">
+        <StackPanel Orientation="Horizontal">
+            <Rectangle Fill="{Binding Name, Converter={StaticResource OxyColorToBrush}}"
+                       Width="25"
+                       Height="16"></Rectangle>
+            <TextBlock Text="{Binding Name}"
+                       Margin="5 0 0 0"></TextBlock>
+        </StackPanel>
+    </DataTemplate>
+
+    <!--获取枚举-->
+    <!--<ObjectDataProvider  x:Key="AxisTypeCollection"
+                         MethodName="GetValues"
+                         ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="enum:AxisType" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>-->
+
+    <!--<ObjectDataProvider  x:Key="AxisPositionCollection"
+                         MethodName="GetValues"
+                         ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="oxya:AxisPosition" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>-->
+
+    <!--<ObjectDataProvider x:Key="SeriesTypeCollection"
+                        MethodName="GetValues"
+                        ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="enum:SeriesType" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>-->
+
+    <!--oxy的-->
+
+    <!--<ObjectDataProvider MethodName="GetValues"
+                        x:Key="TickStyleCollection"
+                        ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="oxya:TickStyle" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>-->
+
+    <!--<ObjectDataProvider x:Key="LegendPlacementCollection"
+                        MethodName="GetValues"
+                        ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="oxyl:LegendPlacement" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>-->
+
+    <!--<ObjectDataProvider x:Key="LegendPositionCollection"
+                        MethodName="GetValues"
+                        ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="oxyl:LegendPosition" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>-->
+
+    <!--<ObjectDataProvider x:Key="LegendOrientationCollection"
+                        MethodName="GetValues"
+                        ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="oxyl:LegendOrientation" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>-->
+
+    <!--<ObjectDataProvider x:Key="LineStyleCollection"
+                        MethodName="GetValues"
+                        ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="oxy:LineStyle" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>-->
+
+    <!--<ObjectDataProvider x:Key="MarkerTypeCollection"
+                        MethodName="GetValues"
+                        ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="oxy:MarkerType" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>-->
+
+    <ObjectDataProvider x:Key="ColorsCollection"
+                        MethodName="GetProperties"
+                        ObjectInstance="{x:Type color:MyColors}">
+    </ObjectDataProvider>
+
+    <!--ToggleButton样式-->
+    <Style x:Key="ToggleButtonStyle"
+           TargetType="{x:Type ToggleButton}">
+        <Setter Property="FocusVisualStyle"
+                Value="{x:Null}" />
+        <Setter Property="Height"
+                Value="20" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Foreground"
+                Value="Gainsboro" />
+        <Setter Property="FontSize"
+                Value="20" />
+        <Setter Property="FontFamily"
+                Value="宋体" />
+        <Setter Property="FontWeight"
+                Value="Bold" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Padding"
+                Value="10 5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Canvas Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}"
+                            Background="{TemplateBinding Background}"
+                            SnapsToDevicePixels="True">
+                        <Canvas x:Name="canvNormal"
+                                Visibility="Visible"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                Background="{TemplateBinding Background}"
+                                SnapsToDevicePixels="True"
+                                Canvas.Left="25">
+                            <Path Data="M 0 0 L 6 6  12 0 "
+                                  Stroke="LightSteelBlue"
+                                  StrokeThickness="2"
+                                  Canvas.Right="5"
+                                  Canvas.Top="5" />
+                            <Path Data="M 0 0 L 6 6  12 0 "
+                                  Stroke="LightSteelBlue"
+                                  StrokeThickness="2"
+                                  Canvas.Right="5"
+                                  Canvas.Top="10" />
+                        </Canvas>
+                        <Canvas x:Name="canvChecked"
+                                Visibility="Hidden"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                Background="{TemplateBinding Background}"
+                                SnapsToDevicePixels="True"
+                                Canvas.Left="25">
+
+                            <Path Data="M 0 -6 L 6 0 0 6 "
+                                  Stroke="LightSteelBlue"
+                                  StrokeThickness="2"
+                                  Canvas.Right="5"
+                                  Canvas.Top="10" />
+                            <Path Data="M 0 -6 L 6 0 0 6"
+                                  Stroke="LightSteelBlue"
+                                  StrokeThickness="2"
+                                  Canvas.Right="10"
+                                  Canvas.Top="10" />
+                        </Canvas>
+
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="25 5 0 0"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Canvas>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed"
+                                 Value="true">
+                            <Setter Property="Background"
+                                    Value="SlateGray" />
+                        </Trigger>
+                        <Trigger Property="IsChecked"
+                                 Value="true">
+                            <Setter Property="Visibility"
+                                    TargetName="canvChecked"
+                                    Value="Visible" />
+                            <Setter Property="Visibility"
+                                    TargetName="canvNormal"
+                                    Value="Hidden" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Expander样式-->
+    <Style x:Key="ExpanderStyle"
+           TargetType="{x:Type Expander}">
+
+        <Setter Property="FocusVisualStyle"
+                Value="{x:Null}" />
+        <Setter Property="Foreground"
+                Value="#383838" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Stretch" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Expander}">
+                    <Border SnapsToDevicePixels="True">
+                        <DockPanel>
+                            <ToggleButton x:Name="HeaderSite"
+                                          MinWidth="0"
+                                          MinHeight="0"
+                                          FocusVisualStyle="{x:Null}"
+                                          Padding="{TemplateBinding Padding}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Header}"
+                                          ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                          DockPanel.Dock="Top"
+                                          FontFamily="{TemplateBinding FontFamily}"
+                                          FontSize="{TemplateBinding FontSize}"
+                                          FontStretch="{TemplateBinding FontStretch}"
+                                          FontStyle="{TemplateBinding FontStyle}"
+                                          FontWeight="{TemplateBinding FontWeight}"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          Style="{DynamicResource ToggleButtonStyle}"
+                                          IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                            </ToggleButton>
+                            <ContentPresenter x:Name="ExpandSite"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Content="{TemplateBinding Content}"
+                                              ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              DockPanel.Dock="Bottom"
+                                              Focusable="False"
+                                              Visibility="Collapsed" />
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded"
+                                 Value="True">
+                            <Setter TargetName="ExpandSite"
+                                    Property="Visibility"
+                                    Value="Visible" />
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled"
+                                 Value="False">
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RadioButtonStyle"
+           TargetType="{x:Type RadioButton}">
+        <Setter Property="FocusVisualStyle">
+            <Setter.Value>
+                <Style>
+                    <Setter Property="Control.Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Rectangle Margin="2"
+                                           SnapsToDevicePixels="True"
+                                           Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                                           StrokeThickness="1"
+                                           StrokeDashArray="1 2" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Margin"
+                Value="0 2 0 0" />
+        <Setter Property="FontSize"
+                Value="15" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Left" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource MaterialDesignBody}" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Grid x:Name="templateRoot"
+                          Background="Transparent"
+                          SnapsToDevicePixels="True">
+                        <Border x:Name="border"
+                                BorderBrush="Red"
+                                BorderThickness="0"
+                                SnapsToDevicePixels="True" />
+                        <Border x:Name="bd2" />
+                        <ContentPresenter x:Name="contentPresenter"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Content="{TemplateBinding Content}"
+                                          Grid.Column="1"
+                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                          Focusable="False"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasContent"
+                                 Value="True">
+                            <Setter Property="FocusVisualStyle">
+                                <Setter.Value>
+                                    <Style>
+                                        <Setter Property="Control.Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <Rectangle Margin="14,0,0,0"
+                                                               SnapsToDevicePixels="True"
+                                                               Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                                                               StrokeThickness="1"
+                                                               StrokeDashArray="1 2" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Padding"
+                                    Value="4,-1,0,0" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource PrimaryHueMidBrush}"
+                                    TargetName="border" />
+                        </Trigger>
+                        <Trigger Property="IsChecked"
+                                 Value="true">
+                            <Setter Property="FontWeight"
+                                    Value="Bold" />
+
+                            <Setter Property="BorderThickness"
+                                    Value="4 0 0 0"
+                                    TargetName="bd2" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource PrimaryHueDarkBrush}"
+                                    TargetName="bd2" />
+                            <Setter Property="Background"
+                                    Value="{DynamicResource PrimaryHueDarkBrush}"
+                                    TargetName="border" />
+                            <Setter Property="Opacity"
+                                    Value="0.05"
+                                    TargetName="border" />
+                        </Trigger>
+                        <Trigger Property="IsChecked"
+                                 Value="{x:Null}" />
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="MinHeight"
+                Value="44" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+    </Style>
+
+    <!--全局TextBlock垂直居中-->
+    <Style TargetType="TextBlock">
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+    </Style>
+
+    <Style TargetType="TextBox"
+           BasedOn="{StaticResource MaterialDesignTextBox}">
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+    </Style>
+</ResourceDictionary>
