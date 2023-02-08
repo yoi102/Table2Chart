@@ -5,6 +5,8 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:commn="clr-namespace:Table2Chart.Common"
+             xmlns:ex="clr-namespace:Table2Chart.Extensions"
+             xmlns:oxys="clr-namespace:OxyPlot.Series;assembly=OxyPlot"
              xmlns:local="clr-namespace:Table2Chart.Views.OxyProperties"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:series="clr-namespace:Table2Chart.Common.Models.OxyModels.Series"
@@ -189,6 +191,18 @@
                             <TextBox  Grid.Column="1"
                                       md:HintAssist.Hint="标题"
                                       Text="{Binding Model.BarSeriesProperty.Title}" />
+                        </Grid>
+                        <Grid Margin="0 3 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="80*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="数值位置："
+                                       VerticalAlignment="Center" />
+                            <ComboBox Grid.Column="1"
+                                      SelectedItem="{Binding Model.BarSeriesProperty.LabelPlacement}"
+                                      ItemsSource="{Binding Source={ex:EnumBindingSource  {x:Type oxys:LabelPlacement}}}"
+                                      Margin="3 0 0 0" />
                         </Grid>
                     </StackPanel>
 

@@ -52,19 +52,9 @@ namespace Table2Chart.Views
                 this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             };
             //退出？
-            btnClose.Click += async (s, e) =>
+            btnClose.Click +=  (s, e) =>
             {
-                var dialogResult = await dialogHostService.Question("温馨提示", "确认退出？");
-                if (dialogResult?.Result != Prism.Services.Dialogs.ButtonResult.OK) return;
-                regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(PrismManager.SettingsView);
-                //退出保存json
-                PaletteHelper _paletteHelper = new PaletteHelper();
-                var theme = _paletteHelper.GetTheme() as Theme;
-                //主题
-                JsonConfigHelper.SaveConfig(theme, JsonConfigHelper.ConfigFile.SkinConfig);
-                //服务内容
-                if (variableService is VariableService variableConfig)
-                    JsonConfigHelper.SaveConfig(variableConfig, JsonConfigHelper.ConfigFile.VariableConfig);
+
                 //关闭window
                 this.Close();
             };
@@ -97,6 +87,24 @@ namespace Table2Chart.Views
             menuBar.SelectionChanged += (s, e) =>
             {
                 drawewHost.IsLeftDrawerOpen = false;
+            };
+            this.Closing += async (s, e) =>
+            {
+                e.Cancel = true;
+                var dialogResult = await dialogHostService.Question("温馨提示", "确认退出？");
+                if (dialogResult?.Result != Prism.Services.Dialogs.ButtonResult.OK) return;
+                regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(PrismManager.SettingsView);
+                //退出保存json
+                PaletteHelper _paletteHelper = new PaletteHelper();
+                var theme = _paletteHelper.GetTheme() as Theme;
+                //主题
+                JsonConfigHelper.SaveConfig(theme, JsonConfigHelper.ConfigFile.SkinConfig);
+                //服务内容
+                if (variableService is VariableService variableConfig)
+                    JsonConfigHelper.SaveConfig(variableConfig, JsonConfigHelper.ConfigFile.VariableConfig);
+                Environment.Exit(0);
+
+
             };
         }
 

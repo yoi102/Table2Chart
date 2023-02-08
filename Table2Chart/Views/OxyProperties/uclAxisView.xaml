@@ -79,6 +79,28 @@
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="80*" />
                         </Grid.ColumnDefinitions>
+                        <TextBlock Text="主刻度间隔："
+                                   VerticalAlignment="Center" />
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding MajorStep}"
+                                 Margin="3 0 0 0" />
+                    </Grid>
+                    <Grid Margin="0 3 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="80*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="主刻度间隔："
+                                   VerticalAlignment="Center" />
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding MinorStep}"
+                                 Margin="3 0 0 0" />
+                    </Grid>
+                    <Grid Margin="0 3 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="80*" />
+                        </Grid.ColumnDefinitions>
                         <TextBlock Text="间隙："
                                    VerticalAlignment="Center" />
                         <TextBox Grid.Column="1"

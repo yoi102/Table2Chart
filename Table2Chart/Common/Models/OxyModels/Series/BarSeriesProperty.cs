@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using OxyPlot;
+using OxyPlot.Series;
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +17,12 @@ namespace Table2Chart.Common.Models.OxyModels.Series
         private ObservableCollection<BarItemProperty> _BarItem = new ObservableCollection<BarItemProperty>();
         private string _ColumnName = string.Empty;
         private string _TableName;
-
+        private LabelPlacement _LabelPlacement = LabelPlacement.Base ;
+        public LabelPlacement LabelPlacement
+        {
+            get { return _LabelPlacement; }
+            set { SetProperty(ref _LabelPlacement, value); }
+        }
         /// <summary>
         /// 使用的表
         /// </summary>

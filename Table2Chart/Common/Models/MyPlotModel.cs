@@ -245,6 +245,7 @@ namespace Table2Chart.Common.Models
             //    axisProperty.AxisType = AxisType.CategoryAxis;
 
             //}
+       
             switch (axisProperty.AxisType)
             {
                 case AxisType.LinearAxis:
@@ -269,6 +270,8 @@ namespace Table2Chart.Common.Models
                 default:
                     break;
             }
+            axis.MajorStep = axisProperty.MajorStep;
+            axis.MinorStep = axisProperty.MinorStep;
             axis.Position = axisPosition;
             axis.Title = axisProperty.AxisTitle;
             axis.TickStyle = axisProperty.TickStyle;
@@ -363,6 +366,8 @@ namespace Table2Chart.Common.Models
             {
                 Title = barSeriesProperty.Title,
                 IsStacked = isStacked,
+                LabelPlacement = barSeriesProperty.LabelPlacement,
+                LabelFormatString = "{0}",
                 ItemsSource = barSeriesProperty.BarItem,
                 ColorField = nameof(BarItemProperty.Color),
                 ValueField = nameof(BarItemProperty.Value),
@@ -587,7 +592,6 @@ namespace Table2Chart.Common.Models
                 PieSeriesProperty.TableName = tembar.TableName;
                 PieSeriesProperty.Title = tembar.Title;
                 PieSeriesProperty.ColumnName = tembar.ColumnName;
-
                 foreach (var item in tembar.BarItem)
                 {
                     PieSeriesProperty.PieSlice.Add(new PieSliceProperty
@@ -608,6 +612,7 @@ namespace Table2Chart.Common.Models
                 SeriesType = SeriesType.BarSeries;
                 BarSeriesProperty.TableName = tempie.TableName;
                 BarSeriesProperty.Title = tempie.Title;
+                BarSeriesProperty.LabelPlacement = LabelPlacement.Base;
                 BarSeriesProperty.ColumnName = tempie.ColumnName;
                 foreach (var item in tempie.PieSlice)
                 {

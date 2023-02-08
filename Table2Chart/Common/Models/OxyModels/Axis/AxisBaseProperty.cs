@@ -24,6 +24,20 @@ namespace Table2Chart.Common.Models.OxyModels.Axis
         private OxyColor _ExtraGridlineColor = OxyColors.Red;
         private bool _IsAxisVisibility = true;
         private double _CategoryAxisGapWidth = 0.3;
+        private double _MajorStep = double.NaN;
+        private double _MinorStep = double.NaN;
+
+        public double MajorStep
+        {
+            get { return _MajorStep; }
+            set { SetProperty(ref _MajorStep, value); }
+        }
+        public double MinorStep
+        {
+            get { return _MinorStep; }
+            set { SetProperty(ref _MinorStep, value); }
+        }
+     
 
         /// <summary>
         /// CategoryAxis 的间隙

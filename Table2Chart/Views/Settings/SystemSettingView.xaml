@@ -56,12 +56,12 @@
                           IsChecked="{Binding TimerIntervalOn}" />
             <mah:NumericUpDown Grid.Row="0"
                                Minimum="1"
-                               Visibility="{Binding TimerIntervalOn,Converter={StaticResource Bool2Visibility}}"
-                               Grid.Column="3"
+                     Visibility="{Binding TimerIntervalOn,Converter={StaticResource Bool2Visibility}}"
+                     Grid.Column="3"
                                Value="{Binding TimerIntervalSeconds,ValidatesOnExceptions=True}" />
 
             <mah:NumericUpDown Grid.Row="1"
-                               Grid.Column="1"
+                     Grid.Column="1"
                                Minimum="1"
                                Value="{Binding PlotViewsColumnsCount}" />
             <ToggleButton Grid.Row="1"

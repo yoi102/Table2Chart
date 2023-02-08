@@ -26,7 +26,7 @@
                             Data="{Binding}" />
     </UserControl.Resources>
     <!--<md:DrawerHost IsLeftDrawerOpen="{Binding IsLeftDrawerOpen}">-->
-    <md:DrawerHost IsLeftDrawerOpen="{Binding IsLeftDrawerOpen}">
+        <md:DrawerHost IsLeftDrawerOpen="{Binding IsLeftDrawerOpen}">
         <!--右侧栏-->
         <md:DrawerHost.LeftDrawerContent>
             <md:Card>
@@ -35,10 +35,10 @@
                                 Margin="10 30 0 0">
                         <TextBlock  Text="每隔" />
                         <mah:NumericUpDown Margin="10 0 10 0"
-                                           MinWidth="30"
+                                 MinWidth="30"
                                            Minimum="1"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
                                            Value="{Binding TimerIntervalSeconds}" />
                         <TextBlock Text="秒更新一次" />
                     </StackPanel>
@@ -46,11 +46,11 @@
                                 Margin="10 10 0 0">
                         <TextBlock Text="图表：宽" />
                         <mah:NumericUpDown Margin="10 0 10 0"
-                                           MinWidth="40"
+                                 MinWidth="40"
                                            Maximum="1200"
                                            Minimum="20"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
                                            Value="{Binding PlotViewWidth,UpdateSourceTrigger=PropertyChanged}" />
                         <Slider  Maximum="2000"
                                  Minimum="20"
@@ -66,11 +66,11 @@
                                 Margin="49 10 0 0">
                         <TextBlock Text="高" />
                         <mah:NumericUpDown Margin="10 0 10 0"
-                                           MinWidth="40"
+                                 MinWidth="40"
                                            Maximum="2000"
                                            Minimum="20"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
                                            Value="{Binding PlotViewHeight,UpdateSourceTrigger=PropertyChanged}" />
                         <Slider  Maximum="2000"
                                  Minimum="0"
@@ -88,8 +88,8 @@
                         <TextBlock Text="图表列数:" />
                         <mah:NumericUpDown MinWidth="40"
                                            Minimum="1"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
                                            Value="{Binding PlotViewsColumnsCount}" />
                     </StackPanel>
                     <!--<StackPanel Orientation="Horizontal"
