@@ -45,7 +45,7 @@ namespace Table2Chart.Extensions
         /// <param name="action"></param>
         public static void Register(this IEventAggregator aggregator, Action<UpdateModel> action)
         {
-            aggregator.GetEvent<UpdateLoadingEvent>().Subscribe(action);
+            aggregator.GetEvent<UpdateLoadingEvent>().Subscribe(action, ThreadOption.UIThread);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Table2Chart.Extensions
         public static void RegisterMessage(this IEventAggregator aggregator, Action<MessageModel> action, string filterName = "Main")
         {
             aggregator.GetEvent<MessageEvent>().Subscribe(action,
-                ThreadOption.PublisherThread, true, (m) =>
+                ThreadOption.UIThread, true, (m) =>
                 {
                     return m.Filter.Equals(filterName);
                 });

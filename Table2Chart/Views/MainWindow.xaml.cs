@@ -23,14 +23,14 @@ namespace Table2Chart.Views
             //注册等待转圈窗口
             aggregator.Register(arg =>
             {
-                dialogHost.Dispatcher.BeginInvoke(new Action(() =>
-                {
+                //dialogHost.Dispatcher.BeginInvoke(new Action(() =>
+                //{
                     dialogHost.IsOpen = arg.IsOpen;//
                     if (dialogHost.IsOpen)
                     {
                         dialogHost.DialogContent = new ProgressView();
                     }
-                }));
+                //}));
             });
             //注册提示消息
             aggregator.RegisterMessage(arg =>
@@ -38,7 +38,8 @@ namespace Table2Chart.Views
                 string message = "error";
                 if (arg.Message != null)
                     message = arg.Message;
-                snackbar.Dispatcher.BeginInvoke(new Action(() => snackbar.MessageQueue.Enqueue(message)));
+                snackbar.MessageQueue.Enqueue(message);
+                //snackbar.Dispatcher.BeginInvoke(new Action(() => snackbar.MessageQueue.Enqueue(message)));
             }, "Main");
 
             //最小化
@@ -104,7 +105,7 @@ namespace Table2Chart.Views
                     JsonConfigHelper.SaveConfig(variableConfig, JsonConfigHelper.ConfigFile.VariableConfig);
                 Environment.Exit(0);
 
-
+                
             };
         }
 

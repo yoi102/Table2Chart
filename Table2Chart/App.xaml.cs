@@ -30,15 +30,8 @@ namespace Table2Chart
     /// </summary>
     public partial class App
     {
-        private readonly string inputPasswordpassword;
-        private readonly string realPassword;
-
-        public App(string password = null)
-        {
-            this.inputPasswordpassword = password;
-            realPassword = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
-        }
-
+        private string inputPassword = string.Empty;
+        private string realPassword = string.Empty;
         private static Mutex appMutex;
 
         protected override Window CreateShell()
@@ -48,7 +41,17 @@ namespace Table2Chart
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            foreach (var item in e.Args)
+            {
+                inputPassword = item;
+            }
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            realPassword = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
+            CheckMutex(e);
+        }
+
+        private void CheckMutex(StartupEventArgs e)
+        {
 
             //System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             ////string name = assembly.GetName().Version.ToString();
@@ -124,7 +127,7 @@ namespace Table2Chart
                 //_paletteHelper.ChangePrimaryColor( new System.Windows.Media.Color()) ;
             }
 
-            if (!realPassword.Equals(inputPasswordpassword))
+            if (!realPassword.Equals(inputPassword))
             {
                 var loginView = Container.Resolve<LoginView>();
                 var result = loginView.ShowDialog();
@@ -184,21 +187,7 @@ namespace Table2Chart
             }
         }
 
-        //protected override IContainerExtension CreateContainerExtension()
-        //{
-        //    var serviceCollection = new ServiceCollection();
-        //    serviceCollection.AddLogging(configure =>
-        //    {
-        //        configure.ClearProviders();
-        //        configure.SetMinimumLevel(LogLevel.Trace);
-        //        configure.AddNLog();
-        //    });
-        //    //return new DryIocContainerExtension(new Container(CreateContainerRules()));
-
-        //    return new DryIocContainerExtension(new Container(CreateContainerRules())
-        //        .WithDependencyInjectionAdapter(serviceCollection));
-        //}
-
+    
         protected override IContainerExtension CreateContainerExtension()
         {
             var serviceCollection = new ServiceCollection();

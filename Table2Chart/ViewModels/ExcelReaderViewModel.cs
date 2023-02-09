@@ -23,6 +23,7 @@ using Table2Chart.Extensions;
 using Table2Chart.Controls;
 using Table2Chart.Views;
 using Table2Chart.Views.Dialogs;
+using System.Threading.Tasks;
 
 namespace Table2Chart.ViewModels
 {
@@ -62,9 +63,13 @@ namespace Table2Chart.ViewModels
         /// <param name="navigationContext"></param>
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
-            UpdateLoading(true);
             base.OnNavigatedTo(navigationContext);
+            Task.Run(() => UpdatePage());
+        }
 
+        private void UpdatePage()
+        {
+            UpdateLoading(true);
             //进来时刷新表格
             foreach (var item in DataTableInfos)//更新了
             {
