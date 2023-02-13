@@ -48,6 +48,15 @@
                     <SolidColorBrush Color="{StaticResource MaterialDesignShadow}" />
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ItemsSource, RelativeSource={RelativeSource Mode=Self}}"
+                             Value="{x:Null}">
+                    <Setter Property="Visibility"
+                            Value="Hidden" />
+                </DataTrigger>
+
+            </Style.Triggers>
+
         </Style>
 
         <DataTemplate DataType="{x:Type dataSet:ColumnInfo}">
