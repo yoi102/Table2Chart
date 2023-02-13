@@ -11,7 +11,7 @@ using Table2Chart.Common.Services;
 
 namespace Table2Chart.ViewModels
 {
-    public class MainWindowViewModel : BindableBase, IConfigureService
+    public class MainWindowViewModel : BindableBase
     {
         private readonly IRegionManager regionManager;
 

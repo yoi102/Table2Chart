@@ -138,7 +138,7 @@ namespace Table2Chart
                 }
             }
             //将MainWindow上下文作为IConfigureService服务
-            var service = Current.MainWindow.DataContext as IConfigureService;
+            var service = Current.MainWindow.DataContext as MainWindowViewModel;
             service?.Configure();
             base.OnInitialized();
         }
