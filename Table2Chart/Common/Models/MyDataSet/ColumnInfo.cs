@@ -542,12 +542,22 @@ namespace Table2Chart.Common.Models.MyDataSet
             if (ExpressionCalculator?.ColumnInfo == null) return;
             if (_StringValue == null) return;
             var columnInfo = ExpressionCalculator.ColumnInfo;
-            if (double.TryParse(_StringValue, out double d))
+
+            if (_StringValue == "Pi")
+            {
+                Value = Math.PI;
+            }
+            else if (_StringValue == "E")
+            {
+                Value = Math.E;
+            }
+            else if (double.TryParse(_StringValue, out double d))
             {
                 Value = d;
             }
             else
             {
+                Value = 0;
                 //如果为选择的属性
                 foreach (var item in columnInfo.GetType().GetProperties())
                 {
@@ -556,6 +566,7 @@ namespace Table2Chart.Common.Models.MyDataSet
                         _StringValue.Equals(o[0].Description))
                     {
                         Value = (double)item.GetValue(columnInfo);
+                        break;
                     }
                 }
             }
