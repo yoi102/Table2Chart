@@ -428,14 +428,18 @@
                     </ListBox.ContextMenu>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction  Command="{Binding ClearAllFiltersCommand}">
-                                <i:InvokeCommandAction.CommandParameter>
+                            <i:InvokeCommandAction  Command="{Binding ClearAllFiltersCommand}"
+                                                    CommandParameter="{Binding ElementName=DataGrid}">
+                                <!--<i:InvokeCommandAction.CommandParameter>
                                     <MultiBinding Converter="{StaticResource objectConverter}">
                                         <Binding  ElementName="DataGrid" />
                                         <Binding  ElementName="GlobalFilter" />
                                     </MultiBinding>
-                                </i:InvokeCommandAction.CommandParameter>
+                                </i:InvokeCommandAction.CommandParameter>-->
                             </i:InvokeCommandAction>
+                            <i:ChangePropertyAction TargetName="GlobalFilter"
+                                                    PropertyName="Text"
+                                                    Value="" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     <ListBox.ItemsPanel>

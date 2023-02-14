@@ -247,13 +247,14 @@ namespace Table2Chart.ViewModels
         /// <summary>
         /// 清除所有过滤条件命令,暂未使用
         /// </summary>
-        public ICommand ClearAllFiltersCommand => new DelegateCommand<object>(obj =>
+        public ICommand ClearAllFiltersCommand => new DelegateCommand<DataGrid>(obj =>
         {
-            var values = (object[])obj;
-            var dataGrid = (DataGrid)values[0];
-            var textBox = ((TextBox)values[1]);
-            textBox.Text = string.Empty;
-            ClearDataGridFilters(dataGrid);
+            //var values = (object[])obj;
+            //var dataGrid = (DataGrid)values[0];
+            //var textBox = ((TextBox)values[1]);
+            //textBox.Text = string.Empty;
+
+            ClearDataGridFilters(obj);
         });
 
         /// <summary>
