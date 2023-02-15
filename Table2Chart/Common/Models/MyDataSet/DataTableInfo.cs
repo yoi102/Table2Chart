@@ -109,7 +109,7 @@ namespace Table2Chart.Common.Models.MyDataSet
             List<string> strings = new List<string>();
             for (int i = 0; i < _DataTable.Columns.Count; i++)
             {
-                var columnItems = _DataTable.AsEnumerable().Select(r => r.Field<object>(i)).ToList();//转为obj是可以的
+                var columnItems = _DataTable.AsEnumerable().Select(r => r.Field<object>(i));//转为obj是可以的
                 var dataList = ReaderExtensions.ListObj2Double(columnItems);//当前列
                 var columnInfo = _ColumnInfos.FirstOrDefault(x => x.Name == _DataTable.Columns[i].ColumnName);
                 strings.Add(_DataTable.Columns[i].ColumnName);

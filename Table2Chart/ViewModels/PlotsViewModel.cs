@@ -537,7 +537,7 @@ namespace Table2Chart.ViewModels
                 myPlotModel.ErrorMessage = $"找不到表：{tableName}";
                 return;
             }
-            var columnList = dataTableInfo.DataTable.AsEnumerable().Select(r => r.Field<object>(myPlotModel.BarSeriesProperty.ColumnName)).ToList();//转为obj是可以的
+            var columnList = dataTableInfo.DataTable.AsEnumerable().Select(r => r.Field<object>(myPlotModel.BarSeriesProperty.ColumnName));//转为obj是可以的
             var doubleList = ReaderExtensions.ListObj2Double(columnList);//当前列
             myPlotModel.BarSeriesProperty.UpdateBarItem(doubleList);
             myPlotModel.ErrorMessage = null;
@@ -555,7 +555,7 @@ namespace Table2Chart.ViewModels
                 myPlotModel.ErrorMessage = $"找不到表：{tableName}";
                 return;
             }
-            var columnList = dataTableInfo.DataTable.AsEnumerable().Select(r => r.Field<object>(myPlotModel.PieSeriesProperty.ColumnName)).ToList();//转为obj是可以的
+            var columnList = dataTableInfo.DataTable.AsEnumerable().Select(r => r.Field<object>(myPlotModel.PieSeriesProperty.ColumnName));//转为obj是可以的
             var doubleList = ReaderExtensions.ListObj2Double(columnList);//当前列
             myPlotModel.PieSeriesProperty.SetPieLice(doubleList);
             myPlotModel.ErrorMessage = null;
@@ -631,14 +631,14 @@ namespace Table2Chart.ViewModels
                 }
                 lineSeries.Points.Clear();
                 var EnumerableTables = dataTableInfo.DataTable.AsEnumerable();
-                var columnYList = EnumerableTables.Select(r => r.Field<object>(lineSeries.ColumnNameY)).ToList();//转为obj是可以的
-                var doubleYList = ReaderExtensions.ListObj2Double(columnYList);//当前列
+                var columnYList = EnumerableTables.Select(r => r.Field<object>(lineSeries.ColumnNameY));//转为obj是可以的
+                var doubleYList = ReaderExtensions.ListObj2Double(columnYList).ToList();//当前列
 
                 if (!string.IsNullOrEmpty(lineSeries.ColumnNameX))
                 {
-                    var columnXList = dataTableInfo.DataTable.AsEnumerable().Select(r => r.Field<object>(lineSeries.ColumnNameX)).ToList();//转为obj是可以的
+                    var columnXList = dataTableInfo.DataTable.AsEnumerable().Select(r => r.Field<object>(lineSeries.ColumnNameX));//转为obj是可以的
 
-                    var doubleXList = ReaderExtensions.ListObj2Double(columnXList);//当前列
+                    var doubleXList = ReaderExtensions.ListObj2Double(columnXList).ToList();//当前列
 
                     for (int i = 0; i < doubleYList.Count; i++)
                     {

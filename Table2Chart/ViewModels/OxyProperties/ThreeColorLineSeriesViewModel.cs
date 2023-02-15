@@ -143,7 +143,7 @@ namespace Table2Chart.ViewModels.OxyProperties
                 {
                     if (!columnsName.Contains(lineSeries.ColumnNameY))
                     {
-                        lineSeries.ColumnNameY = columnsName.ToList()[0];
+                        lineSeries.ColumnNameY = columnsName.First();
                     }
                 }
                 else

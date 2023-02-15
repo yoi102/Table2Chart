@@ -66,7 +66,7 @@ namespace Table2Chart.Extensions
             return result;
         }
 
-        public static List<double> ListObj2Double(List<object> listObj)
+        public static IEnumerable<double> ListObj2Double(IEnumerable<object> listObj)
         {
             List<double> result = new List<double>();
             foreach (var item in listObj)
