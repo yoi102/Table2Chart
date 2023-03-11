@@ -1,29 +1,27 @@
-﻿using DryIoc;
-using Gma.System.MouseKeyHook;
+﻿using Gma.System.MouseKeyHook;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Prism.Commands;
-using Prism.Ioc;
+using Prism.Events;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Table2Chart.Common.Enum;
 using Table2Chart.Common.Models;
 using Table2Chart.Common.Models.MyDataSet;
+using Table2Chart.Common.Models.OxyModels.Series;
 using Table2Chart.Common.MVVM;
 using Table2Chart.Common.Services;
 using Table2Chart.Extensions;
-using Table2Chart.Common.Models.OxyModels.Series;
 using Table2Chart.Views;
 using Table2Chart.Views.OxyProperties;
-using System.Threading.Tasks;
 
 namespace Table2Chart.ViewModels
 {
@@ -32,15 +30,16 @@ namespace Table2Chart.ViewModels
         #region Constructors
 
         public PlotsViewModel(Logger<PlotsView> logger,
-            IContainerProvider containerProvider,
+            IEventAggregator eventAggregator,
+            IDialogHostService dialogHostService,
             IVariableService variableService,
-            IDialogService dialogService) : base(containerProvider)
+            IDialogService dialogService) : base(eventAggregator)
         {
             globalHook = Hook.GlobalEvents();
             globalHook.KeyDown += GlobalHook_KeyDown;
             globalHook.KeyUp += GlobalHook_KeyUp;
             KeepAlive = true;
-            dialogHost = containerProvider.Resolve<IDialogHostService>();
+            this.dialogHostService = dialogHostService;
             _DataTableInfos = variableService.DataTableInfos;
 
             this.logger = logger;
@@ -101,7 +100,7 @@ namespace Table2Chart.ViewModels
         /// <summary>
         /// IDialogHostService 用于 Md 的弹窗服务
         /// </summary>
-        private readonly IDialogHostService dialogHost;
+        private readonly IDialogHostService dialogHostService;
 
         /// <summary>
         /// Prism 的弹窗服务
@@ -333,7 +332,7 @@ namespace Table2Chart.ViewModels
             }
             if (!string.IsNullOrEmpty(view))
             {
-                var result = await dialogHost.ShowDialog(view, null);
+                var result = await dialogHostService.ShowDialog(view, null);
 
                 if (result.Result == ButtonResult.OK &&
                     result.Parameters.ContainsKey("Model"))
@@ -352,7 +351,7 @@ namespace Table2Chart.ViewModels
         /// </summary>
         public ICommand DeleteCommand => new DelegateCommand<MyPlotModel>(async (parameter) =>
         {
-            var dialogResult = await dialogHost.Question("温馨提示", "确认删除？");
+            var dialogResult = await dialogHostService.Question("温馨提示", "确认删除？");
             if (dialogResult.Result != ButtonResult.OK) return;
 
             MyPlotModels.Remove(parameter);
@@ -464,7 +463,7 @@ namespace Table2Chart.ViewModels
             }
             catch (Exception ex)
             {
-                aggregator.SendMessage(ex.Message);
+                eventAggregator.SendMessage(ex.Message);
                 logger.LogError(ex, "DispatcherTimer_Tick-Error!");
             }
         }
@@ -610,7 +609,7 @@ namespace Table2Chart.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    aggregator.SendMessage(ex.Message);
+                    eventAggregator.SendMessage(ex.Message);
                     logger.LogError(ex, "UpdateTables-Error");
                 }
             }

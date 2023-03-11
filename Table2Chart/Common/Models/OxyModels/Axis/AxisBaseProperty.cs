@@ -37,7 +37,7 @@ namespace Table2Chart.Common.Models.OxyModels.Axis
             get { return _MinorStep; }
             set { SetProperty(ref _MinorStep, value); }
         }
-     
+
 
         /// <summary>
         /// CategoryAxis 的间隙

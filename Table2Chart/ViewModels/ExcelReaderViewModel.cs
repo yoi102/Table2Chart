@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using Prism.Commands;
-using Prism.Ioc;
+using Prism.Events;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 using System;
@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -19,11 +20,10 @@ using System.Windows.Threading;
 using Table2Chart.Common.Models.MyDataSet;
 using Table2Chart.Common.MVVM;
 using Table2Chart.Common.Services;
-using Table2Chart.Extensions;
 using Table2Chart.Controls;
+using Table2Chart.Extensions;
 using Table2Chart.Views;
 using Table2Chart.Views.Dialogs;
-using System.Threading.Tasks;
 
 namespace Table2Chart.ViewModels
 {
@@ -31,16 +31,15 @@ namespace Table2Chart.ViewModels
     {
         #region Constructors
 
-        public ExcelReaderViewModel(Logger<ExcelReaderView> logger, IDialogService dialogService,
-            IContainerProvider containerProvider, IVariableService variableService,
-            IDialogHostService dialogHostService) : base(containerProvider)
+        public ExcelReaderViewModel(Logger<ExcelReaderView> logger, IDialogService dialogService, IEventAggregator eventAggregator,
+            IDialogHostService dialogHostService, IVariableService variableService) : base(eventAggregator)
         {
             KeepAlive = true;
-            dialogHost = containerProvider.Resolve<IDialogHostService>();
             this.logger = logger;
             this.dialogService = dialogService;
             this.variableService = variableService;
             this.dialogHostService = dialogHostService;
+
             _DataTableInfos = variableService.DataTableInfos;
             DataTableInfos.CollectionChanged += DataTables_CollectionChanged;
             dispatcherTimer = new DispatcherTimer();
@@ -142,7 +141,6 @@ namespace Table2Chart.ViewModels
         #region Properties
 
         private readonly ObservableCollection<DataTableInfo> _DataTableInfos;
-        private readonly IDialogHostService dialogHost;
         private readonly IDialogHostService dialogHostService;
         private readonly IDialogService dialogService;
         private readonly DispatcherTimer dispatcherTimer;
@@ -323,7 +321,7 @@ namespace Table2Chart.ViewModels
         //    if (dialogResult.Result != Prism.Services.Dialogs.ButtonResult.OK) return;
         //    DataTableInfos.Clear();
         //    SelectedDataTableInfo = null;
-        //    aggregator.SendMessage("数据清理完成");
+        //    eventAggregator.SendMessage("数据清理完成");
         //}
 
         /// <summary>
@@ -345,7 +343,7 @@ namespace Table2Chart.ViewModels
             }
             else
             {
-                aggregator.SendMessage("已取消操作");
+                eventAggregator.SendMessage("已取消操作");
             }
         }
 
@@ -404,12 +402,12 @@ namespace Table2Chart.ViewModels
                     {
                         dt.DataTable = null;
                     }
-                    aggregator.SendMessage(message);
+                    eventAggregator.SendMessage(message);
                 }
             }
             catch (Exception ex)
             {
-                aggregator.SendMessage(ex.Message);
+                eventAggregator.SendMessage(ex.Message);
                 logger.LogError(ex, "UpdateTable");
             }
         }
@@ -428,7 +426,7 @@ namespace Table2Chart.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    aggregator.SendMessage(ex.Message);
+                    eventAggregator.SendMessage(ex.Message);
                     logger.LogError(ex, "UpdateTables-Error");
                 }
             }

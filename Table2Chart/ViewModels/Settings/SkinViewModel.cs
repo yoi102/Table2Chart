@@ -1,7 +1,7 @@
 ﻿using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
 using Prism.Commands;
-using Prism.Ioc;
+using Prism.Events;
 using Prism.Regions;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace Table2Chart.ViewModels.Settings
     /// </summary>
     public class SkinViewModel : NavigationViewModel
     {
-        public SkinViewModel(IContainerProvider containerProvider) : base(containerProvider)
+        public SkinViewModel(IEventAggregator eventAggregator) : base(eventAggregator)
         {
             ITheme theme = _paletteHelper.GetTheme();
             BaseTheme baseTheme = theme.GetBaseTheme();

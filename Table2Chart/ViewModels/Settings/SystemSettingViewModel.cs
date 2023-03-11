@@ -1,6 +1,6 @@
 ﻿using OxyPlot;
 using OxyPlot.Series;
-using Prism.Ioc;
+using Prism.Events;
 using Table2Chart.Common.MVVM;
 using Table2Chart.Common.Services;
 
@@ -15,8 +15,8 @@ namespace Table2Chart.ViewModels.Settings
 
         private PlotModel _PlotModel;
 
-        public SystemSettingViewModel(IContainerProvider containerProvider,
-                    IVariableService variableService) : base(containerProvider)
+        public SystemSettingViewModel(IEventAggregator eventAggregator,
+                    IVariableService variableService) : base(eventAggregator)
         {
             this.variableService = variableService;
 

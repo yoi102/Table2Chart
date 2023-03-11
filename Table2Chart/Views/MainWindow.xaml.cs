@@ -23,13 +23,13 @@ namespace Table2Chart.Views
             //注册等待转圈窗口
             aggregator.Register(arg =>
             {
-                //dialogHost.Dispatcher.BeginInvoke(new Action(() =>
+                //dialogHostService.Dispatcher.BeginInvoke(new Action(() =>
                 //{
-                    dialogHost.IsOpen = arg.IsOpen;//
-                    if (dialogHost.IsOpen)
-                    {
-                        dialogHost.DialogContent = new ProgressView();
-                    }
+                dialogHost.IsOpen = arg.IsOpen;//
+                if (dialogHost.IsOpen)
+                {
+                    dialogHost.DialogContent = new ProgressView();
+                }
                 //}));
             });
             //注册提示消息
@@ -53,7 +53,7 @@ namespace Table2Chart.Views
                 this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             };
             //退出？
-            btnClose.Click +=  (s, e) =>
+            btnClose.Click += (s, e) =>
             {
 
                 //关闭window
@@ -105,7 +105,7 @@ namespace Table2Chart.Views
                     JsonConfigHelper.SaveConfig(variableConfig, JsonConfigHelper.ConfigFile.VariableConfig);
                 Environment.Exit(0);
 
-                
+
             };
         }
 

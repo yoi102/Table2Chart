@@ -2,7 +2,7 @@
 
 Password：年月日
 
-如：20230101
+例如：20230101
 
 ![image](https://user-images.githubusercontent.com/77535233/217285246-e7366508-3ebb-4c1a-b5fd-4259208e878c.png)
 

@@ -13,7 +13,6 @@ using Table2Chart.Common.Models.OxyModels.Axis;
 using Table2Chart.Common.Models.OxyModels.Color;
 using Table2Chart.Common.Models.OxyModels.Legend;
 using Table2Chart.Common.Models.OxyModels.Series;
-using Table2Chart.Common.Models.OxyModels.Axis;
 
 namespace Table2Chart.Common.Models
 {
@@ -245,7 +244,7 @@ namespace Table2Chart.Common.Models
             //    axisProperty.AxisType = AxisType.CategoryAxis;
 
             //}
-       
+
             switch (axisProperty.AxisType)
             {
                 case AxisType.LinearAxis:

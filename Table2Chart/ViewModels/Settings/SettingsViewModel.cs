@@ -1,4 +1,4 @@
-﻿using Prism.Ioc;
+﻿using Prism.Events;
 using Prism.Regions;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,11 +13,11 @@ namespace Table2Chart.ViewModels.Settings
     /// </summary>
     public class SettingsViewModel : NavigationViewModel
     {
-        public SettingsViewModel(IContainerProvider containerProvider) : base(containerProvider)
+        public SettingsViewModel(IEventAggregator eventAggregator, IRegionManager regionManager) : base(eventAggregator)
         {
             MenuBars = new ObservableCollection<MenuBar>();
             CreateMenuBar();
-            regionManager = containerProvider.Resolve<IRegionManager>();
+            this.regionManager = regionManager;
             //regionManager.Regions[PrismManager.SettingsRegionName].RequestNavigate("SkinView");
         }
 
@@ -29,24 +29,8 @@ namespace Table2Chart.ViewModels.Settings
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
-            regionManager.Regions[PrismManager.SettingsRegionName].RequestNavigate("SystemSettingView");
-            try
-            {
-                var v = regionManager.Regions[PrismManager.SettingsRegionName].ActiveViews.FirstOrDefault();
-                var t = v.GetType();
-                foreach (var item in MenuBars)
-                {
-                    if (item.NameSpace == t.Name)
-                    {
-                        _SelectedMenuBar = item;//防止触发NavigatAction
-                        RaisePropertyChanged(nameof(SelectedMenuBar));
-                        break;
-                    }
-                }
-            }
-            catch (System.Exception)
-            {
-            }
+            SelectedMenuBar ??= _MenuBars.First();
+
         }
 
         private ObservableCollection<MenuBar> _MenuBars;

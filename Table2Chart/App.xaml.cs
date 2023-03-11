@@ -187,7 +187,7 @@ namespace Table2Chart
             }
         }
 
-    
+
         protected override IContainerExtension CreateContainerExtension()
         {
             var serviceCollection = new ServiceCollection();

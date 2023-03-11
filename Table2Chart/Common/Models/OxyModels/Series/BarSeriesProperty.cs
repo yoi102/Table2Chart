@@ -17,7 +17,7 @@ namespace Table2Chart.Common.Models.OxyModels.Series
         private ObservableCollection<BarItemProperty> _BarItem = new ObservableCollection<BarItemProperty>();
         private string _ColumnName = string.Empty;
         private string _TableName;
-        private LabelPlacement _LabelPlacement = LabelPlacement.Base ;
+        private LabelPlacement _LabelPlacement = LabelPlacement.Base;
         public LabelPlacement LabelPlacement
         {
             get { return _LabelPlacement; }

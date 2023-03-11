@@ -1,5 +1,4 @@
 ﻿using Prism.Events;
-using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using Table2Chart.Extensions;
@@ -8,11 +7,11 @@ namespace Table2Chart.Common.MVVM
 {
     public class NavigationViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
     {
-        public readonly IEventAggregator aggregator;
+        public readonly IEventAggregator eventAggregator;
 
-        public NavigationViewModel(IContainerProvider containerProvider)
+        public NavigationViewModel(IEventAggregator eventAggregator)
         {
-            aggregator = containerProvider.Resolve<IEventAggregator>();
+            this.eventAggregator = eventAggregator;
         }
 
         private bool _KeepAlive = false;
@@ -38,7 +37,7 @@ namespace Table2Chart.Common.MVVM
 
         public void UpdateLoading(bool IsOpen)
         {
-            aggregator.UpdataLoading(new Events.UpdateModel()
+            eventAggregator.UpdataLoading(new Events.UpdateModel()
             {
                 IsOpen = IsOpen
             });

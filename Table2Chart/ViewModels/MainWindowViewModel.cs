@@ -1,5 +1,4 @@
 ﻿using Prism.Commands;
-using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.ObjectModel;
@@ -7,7 +6,6 @@ using System.Linq;
 using System.Windows.Input;
 using Table2Chart.Common;
 using Table2Chart.Common.Models;
-using Table2Chart.Common.Services;
 
 namespace Table2Chart.ViewModels
 {
